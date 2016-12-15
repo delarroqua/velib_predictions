@@ -1,20 +1,28 @@
-from db_connection import PostgresConnection
-from data_loader import RawDataLoader
+from velib_predictions.connection.db_connection import PostgresConnection
+from velib_predictions.connection.data_loader import RawDataLoader
 from station_enricher import StationEnricher
 
-from model import RFTransformer
-from evaluation import evaluate_model
-from info import compute_model_information
+from velib_predictions.model.model import RFTransformer
+from velib_predictions.model.evaluation import evaluate_model
+from velib_predictions.model.info import compute_model_information
 
-from utils.io import load_json, paths_exist, export_pickle, load_pickle
-from utils.df import get_features_and_targets, FilterPostalCode
+from velib_predictions.utils.io import load_json, paths_exist, export_pickle, load_pickle
+from velib_predictions.utils.df import get_features_and_targets, FilterPostalCode
 
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Todo : Faire un package (setup.py)
+# Todo : reorganize project (create app folder...)
+# Todo : Handle errors in the predict.py (always return something to create 'last_station_update')
+# Todo : Create a decent interface in local (front end)
+
+# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
+# Todo : create auth in api
 
 # Todo : récuperer des données météos
+# Todo : intégrer les données météo
 # Todo : Essayer Keras sur les données
 # Todo : Speedup function 'add_previous_date_variables'
 

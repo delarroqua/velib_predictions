@@ -1,4 +1,4 @@
-from utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
+from ..utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
 
 import logging
 logging.basicConfig(level=logging.INFO)

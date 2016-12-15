@@ -2,7 +2,7 @@ import pandas as pd
 
 from datetime import timedelta
 
-from utils.df import FilterPreviousVariables
+from velib_predictions.utils.df import FilterPreviousVariables
 
 class StationEnricher():
     def __init__(self, stations_df):
