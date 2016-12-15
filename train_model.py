@@ -1,6 +1,5 @@
 from velib_predictions.connection.db_connection import PostgresConnection
 from velib_predictions.connection.data_loader import RawDataLoader
-from station_enricher import StationEnricher
 
 from velib_predictions.model.model import RFTransformer
 from velib_predictions.model.evaluation import evaluate_model
@@ -8,13 +7,13 @@ from velib_predictions.model.info import compute_model_information
 
 from velib_predictions.utils.io import load_json, paths_exist, export_pickle, load_pickle
 from velib_predictions.utils.df import get_features_and_targets, FilterPostalCode
+from velib_predictions.utils.station_enricher import StationEnricher
 
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Todo : Faire un package (setup.py)
-# Todo : reorganize project (create app folder...)
 # Todo : Handle errors in the predict.py (always return something to create 'last_station_update')
 # Todo : Create a decent interface in local (front end)
 
