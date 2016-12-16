@@ -13,13 +13,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Todo : Faire un package (setup.py)
 # Todo : Handle errors in the predict.py (always return something to create 'last_station_update')
-# Todo : Create a decent interface in local (front end)
-
-# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
+# Todo : Create a decent interface in local (css + html + javascript)
 # Todo : create auth in api
 
+# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
+# Todo : Faire un package (setup.py)
 # Todo : récuperer des données météos
 # Todo : intégrer les données météo
 # Todo : Essayer Keras sur les données
