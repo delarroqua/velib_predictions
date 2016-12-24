@@ -8,10 +8,11 @@
 
         {% include 'header.html' %}
 
-        <div class="jumbotron">
+        <div class="row">
             {% include 'form.html' %}
         </div>
 
+        <div class="row">
         {% if prediction is defined %}
             <div class="prediction">
             {% if prediction == -1 %}
@@ -23,11 +24,11 @@
             {% endif %}
             </div>
         {% endif %}
+        </div>
 
         {% include 'footer.html' %}
     </div>
 
-{% include 'map.html' %}
 </body>
 
 </html>
