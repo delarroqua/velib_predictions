@@ -1,0 +1,39 @@
+/* the submit button  */
+.submit-button {
+    background-color: #007dc1;
+    color : white;
+    border-radius: 0.3em;
+    font-size: 1.8em;
+    width: 5em;
+    height: 2em;
+}
+
+
+.submit-button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0061a7), color-stop(1, #007dc1));
+	background:-moz-linear-gradient(top, #0061a7 5%, #007dc1 100%);
+	background:-webkit-linear-gradient(top, #0061a7 5%, #007dc1 100%);
+	background:-o-linear-gradient(top, #0061a7 5%, #007dc1 100%);
+	background:-ms-linear-gradient(top, #0061a7 5%, #007dc1 100%);
+	background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0061a7', endColorstr='#007dc1',GradientType=0);
+	background-color:#0061a7;
+}
+.submit-button:active {
+	position:relative;
+	top:1px;
+}
+
+
+/* form inputs  */
+input[type="text"] {
+    padding: 10px;
+    border: solid 1px #dcdcdc;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+
+#map {
+    height: 400px;
+    width: 100%;
+}

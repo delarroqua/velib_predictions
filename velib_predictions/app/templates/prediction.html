@@ -14,12 +14,20 @@
 
         {% if prediction is defined %}
             <div class="prediction">
+            {% if prediction == -1 %}
+                <h3>Il faut rentrer un nombre pour que ça marche !</h3><br><br>
+            {% elif prediction == 0 %}
+                <h3>La station n° {{ number_station }} n'existe pas : pas de prediction disponible !</h3><br><br>
+            {% else %}
                 <h3>Prediction for station {{ number_station }} : {{ prediction }} available bikes</h3><br><br>
+            {% endif %}
             </div>
         {% endif %}
 
         {% include 'footer.html' %}
     </div>
+
+{% include 'map.html' %}
 </body>
 
 </html>

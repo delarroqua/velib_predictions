@@ -1,8 +1,9 @@
-<form action="/velib/api/prediction" method="post">
+<form action="/prediction" method="get">
 
-    Station number:<br><br>
-    <input type="text" name="number_station" value="{{number_station}}"><br><br>
+    <label for="number_station"><h4>Numéro de la station</h4></label><br>
+    <input type="text" name="number_station" id="number_station" value="{{number_station}}"><br><br>
 
-    <input type="submit" value="Predict">
+    <input type="submit" value="Predict" class="submit-button">
+
 
 </form>

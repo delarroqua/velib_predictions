@@ -1,22 +1,38 @@
-from flask import render_template, request # jsonify
+from flask import render_template, request
 from velib_predictions.app.predict import *
 from velib_predictions.app import app
 from velib_predictions.utils.io import load_pickle
 
+
+
+# Todo : Create list_stations.csv file, and load it to views.py
+# Todo : Integrate a Map with every velib stations on it
+# Todo : Create a decent interface in local (css + html + javascript)
+# Todo : create auth in api
+
+# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
+# Todo : Faire un package (setup.py)
+
+
+
 # Load model
 model = load_pickle("files/model.pkl")
 
-# request example : curl -i http://localhost:5000/velib/api/prediction/4006
-#@app.route('/velib/api/prediction/<int:number_station>', methods=['GET'])
-#def ask_prediction(number_station):
-@app.route('/velib/api/prediction', methods=['POST'])
+# Load list of stations
+# list_stations = pd.read_csv('list_stations.csv')
+
+# request example : curl -i http://localhost:5000/prediction/4006
+@app.route('/prediction', methods=['GET'])
 def ask_prediction():
-    number_station = request.form['number_station']
-    prediction = predict_available_bikes(model, number_station)
-    return render_template('prediction.html', number_station=number_station, prediction=prediction)
-    #return jsonify({'prediction': prediction})
+    number_station = request.args.get('number_station')
+    if (number_station.isdigit()):
+        number_station = int(number_station)
+        prediction = predict_available_bikes(model, number_station)
+    else:
+        prediction = -1
+    return render_template('prediction.html', number_station=number_station, prediction=prediction) # list_stations=list_stations
 
 
 @app.route('/')
 def index():
-    return render_template('prediction.html')
+    return render_template('prediction.html') # list_stations=list_stations
