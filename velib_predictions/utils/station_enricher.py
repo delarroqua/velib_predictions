@@ -4,6 +4,8 @@ from datetime import timedelta
 
 from velib_predictions.utils.df import FilterPreviousVariables, FilterWeatherData
 
+
+
 class StationEnricher():
     def __init__(self, stations_df, weather_data):
         self.stations_df = stations_df

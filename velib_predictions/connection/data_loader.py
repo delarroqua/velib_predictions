@@ -1,9 +1,21 @@
 from ..utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
 
+import pandas as pd
+
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def load_weather_data(path_weather_data):
+    weather_data_raw = pd.read_csv(path_weather_data)
+    # Clean weather data
+    weather_data = weather_data_raw[['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h',
+                                     'Precipitationmm']]  # ' CloudCover', ' Events'
+    weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
+    weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
+    return weather_data
+
 
 
 class RawDataLoader:

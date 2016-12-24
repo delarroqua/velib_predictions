@@ -1,5 +1,5 @@
 from velib_predictions.connection.db_connection import PostgresConnection
-from velib_predictions.connection.data_loader import RawDataLoader
+from velib_predictions.connection.data_loader import RawDataLoader, load_weather_data
 
 from velib_predictions.model.model import RFTransformer
 from velib_predictions.model.evaluation import evaluate_model
@@ -12,8 +12,6 @@ from velib_predictions.utils.station_enricher import StationEnricher
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-import pandas as pd
 
 
 # Todo : Integrate cloud (remove Nan)
@@ -46,13 +44,9 @@ if __name__ == '__main__':
     # Filter df
     stations_filtered_df = FilterPostalCode(stations_raw_df, postal_code_list)
 
-    # Clean weather data
-    weather_data_raw = pd.read_csv('paris_temperature.csv')
-    weather_data = weather_data_raw[
-        ['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h', 'Precipitationmm']]  # ' CloudCover', ' Events'
-    weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
-    weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
-
+    # Load weather data
+    path_weather_data = 'paris_temperature.csv'
+    weather_data = load_weather_data(path_weather_data)
 
     if paths_exist("files/features_train.pkl", "files/features_test.pkl", "files/target_train.pkl",
                    "files/target_test.pkl"):
