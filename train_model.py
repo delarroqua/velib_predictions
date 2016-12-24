@@ -5,7 +5,7 @@ from velib_predictions.model.model import RFTransformer
 from velib_predictions.model.evaluation import evaluate_model
 from velib_predictions.model.info import compute_model_information
 
-from velib_predictions.utils.io import load_json, paths_exist, export_pickle, load_pickle
+from velib_predictions.utils.io import load_json, paths_exist, export_pickle, load_pickle, load_dataframe_pickle
 from velib_predictions.utils.df import get_features_and_targets, FilterPostalCode
 from velib_predictions.utils.station_enricher import StationEnricher
 
@@ -13,14 +13,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Todo : Handle errors in the predict.py (always return something to create 'last_station_update')
-# Todo : Create a decent interface in local (css + html + javascript)
-# Todo : create auth in api
+import pandas as pd
 
-# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
-# Todo : Faire un package (setup.py)
-# Todo : récuperer des données météos
-# Todo : intégrer les données météo
+
+# Todo : Integrate cloud (remove Nan)
+# Todo : Integrate events (create dummies)
+
 # Todo : Essayer Keras sur les données
 # Todo : Speedup function 'add_previous_date_variables'
 
@@ -29,7 +27,11 @@ if __name__ == '__main__':
 
     # Set relevant lists
     postal_code_list = ['75004', '75011', '75012']
-    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous', 'weekday_previous', 'hour_previous', 'minute_previous']
+    # columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
+    #                     'weekday_previous', 'hour_previous', 'minute_previous']
+    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
+                          'weekday_previous', 'hour_previous', 'minute_previous',
+                          'date', 'temperature', 'humidity', 'wind', 'precipitation'] # 'cloud', 'events'
     target_column = "available_bikes"
 
     # Create raw_data_loader
@@ -44,15 +46,32 @@ if __name__ == '__main__':
     # Filter df
     stations_filtered_df = FilterPostalCode(stations_raw_df, postal_code_list)
 
-    # Enrich station
-    logger.info("Enrich dataframe")
-    station_enricher = StationEnricher(stations_df=stations_filtered_df)
-    df_enriched = station_enricher.enrich_stations()
+    # Clean weather data
+    weather_data_raw = pd.read_csv('paris_temperature.csv')
+    weather_data = weather_data_raw[
+        ['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h', 'Precipitationmm']]  # ' CloudCover', ' Events'
+    weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
+    weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
 
-    logger.info("Ratio data_enriched/data_raw : %s", len(df_enriched)/len(stations_raw_df))
 
-    # Get features and target, divided by train & test
-    features_train, features_test, target_train, target_test = get_features_and_targets(df_enriched, target_column)
+    if paths_exist("files/features_train.pkl", "files/features_test.pkl", "files/target_train.pkl",
+                   "files/target_test.pkl"):
+        logger.info("Retrieving features train and test from cache")
+        features_train = load_dataframe_pickle("files/features_train.pkl")
+        features_test = load_dataframe_pickle("files/features_test.pkl")
+        target_train = load_dataframe_pickle("files/target_train.pkl")
+        target_test = load_dataframe_pickle("files/target_test.pkl")
+    else:
+        # Enrich station
+        logger.info("Enrich dataframe")
+        station_enricher = StationEnricher(stations_df=stations_filtered_df, weather_data=weather_data)
+        df_enriched = station_enricher.enrich_stations()
+
+        logger.info("Ratio data_enriched/data_raw : %s", len(df_enriched)/len(stations_raw_df))
+
+        # Get features and target, divided by train & test
+        features_train, features_test, target_train, target_test = get_features_and_targets(df_enriched, target_column)
+
 
     # Load model
     if paths_exist("files/model.pkl"):

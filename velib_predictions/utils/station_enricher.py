@@ -2,11 +2,19 @@ import pandas as pd
 
 from datetime import timedelta
 
-from velib_predictions.utils.df import FilterPreviousVariables
+from velib_predictions.utils.df import FilterPreviousVariables, FilterWeatherData
 
 class StationEnricher():
-    def __init__(self, stations_df):
+    def __init__(self, stations_df, weather_data):
         self.stations_df = stations_df
+        self.weather_data = weather_data
+
+    def add_weather_data(self, df):
+        df_copy = df.copy()
+        df_copy['last_update_date'] = df_copy.last_update_clean.apply(lambda x: x.date())
+        df_with_weather = pd.merge(df_copy, self.weather_data, how='left', left_on='last_update_date', right_on='date')
+        return df_with_weather
+
 
     def add_date_variables(self, df):
         df_with_date_variables = df.copy()
@@ -62,8 +70,11 @@ class StationEnricher():
     def enrich_stations(self):
         stations_df = self.stations_df.copy()
         stations_df = self.add_date_variables(stations_df)
+        stations_df = self.add_weather_data(stations_df)
+        stations_df = FilterWeatherData(stations_df)  # Filter out rows without weather data
         stations_df = self.add_previous_date_variables(stations_df)
-        stations_df = FilterPreviousVariables(stations_df) # Filter out rows without previous variables
+        stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
         stations_df = self.cast_df(stations_df)
-        stations_df_enriched = stations_df.drop(['last_update_clean', 'address', 'postal_code', 'last_update_previous'], 1)
+        stations_df_enriched = stations_df.drop(['last_update_clean', 'address', 'postal_code',
+                                                 'last_update_previous', 'last_update_date', 'date'], 1)  # 'events'
         return stations_df_enriched
