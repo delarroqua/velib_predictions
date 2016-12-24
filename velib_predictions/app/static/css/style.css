@@ -1,3 +1,8 @@
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color: #F9F9F9;
+}
+
 /* the submit button  */
 .submit-button {
     background-color: #007dc1;
@@ -30,4 +35,15 @@ input[type="text"] {
     padding: 10px;
     border: solid 1px #dcdcdc;
     transition: box-shadow 0.3s, border 0.3s;
+}
+
+
+/* prediction form  */
+#prediction-form {
+    text-align: center;
+    padding-top: 2em;
+}
+
+.footer {
+    padding-top: 2em;
 }

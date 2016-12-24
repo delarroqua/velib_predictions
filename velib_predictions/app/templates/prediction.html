@@ -5,16 +5,14 @@
 
 <body>
     <div class="container">
+        {% include 'navbar.html' %}
 
-        {% include 'header.html' %}
-
-        <div class="row">
+        <div class="row" id="prediction-form">
             {% include 'form.html' %}
         </div>
 
-        <div class="row">
+        <div class="row" id="prediction-result">
         {% if prediction is defined %}
-            <div class="prediction">
             {% if prediction == -1 %}
                 <h3>Il faut rentrer un nombre pour que ça marche !</h3><br><br>
             {% elif prediction == 0 %}
@@ -22,7 +20,6 @@
             {% else %}
                 <h3>Prediction for station {{ number_station }} : {{ prediction }} available bikes</h3><br><br>
             {% endif %}
-            </div>
         {% endif %}
         </div>
 
