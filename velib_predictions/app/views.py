@@ -3,11 +3,12 @@ from velib_predictions.app.predict import *
 from velib_predictions.app import app
 from velib_predictions.utils.io import load_pickle
 
-
-
+# Todo : Push git updates
+# Todo : Css of prediction_result.html
+# Todo : Check that javascripts predictions works
+# Todo : Handle basic errors with jquery validate
 # Todo : Create list_stations.csv file, and load it to views.py
 # Todo : Integrate a Map with every velib stations on it
-# Todo : Create a decent interface in local (css + html + javascript)
 # Todo : create auth in api
 
 # Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
@@ -25,6 +26,7 @@ model = load_pickle("files/model.pkl")
 @app.route('/prediction', methods=['POST'])
 def ask_prediction():
     number_station = request.form['number_station']
+    print(number_station)
     prediction = predict_available_bikes(model, number_station)
     return jsonify({'prediction': prediction})
 

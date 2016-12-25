@@ -1,5 +1,5 @@
 from velib_predictions.app.api_utils import get_station_individual, convert_timestamp
-from datetime import timedelta
+from datetime import timedelta, datetime
 import pandas as pd
 
 
@@ -26,8 +26,16 @@ def predict_available_bikes(model, number_station):
         hour = evaluation_date.hour
         minute = evaluation_date.minute
 
+        # Todo : get today weather data
+        # weather data
+        temperature = 10
+        humidity = 10
+        wind = 10
+        precipitation = 10
+
         array_to_predict = [number_station, weekday, hour, minute, latitude, longitude,
-                            available_bikes_previous, weekday_previous, hour_previous, minute_previous]
+                            available_bikes_previous, weekday_previous, hour_previous, minute_previous,
+                            temperature, humidity, wind, precipitation]
         prediction_array = model.predict([array_to_predict])
         prediction = int(prediction_array[0])
         return prediction

@@ -7,7 +7,7 @@ $('#prediction-form').submit(function(e){
     $.post(
         'prediction',
         {
-            number_station: $('#number_station').val(),
+            number_station: $('#number_station').val()
         },
         function(data){
             prediction = data['prediction']
