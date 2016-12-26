@@ -13,6 +13,7 @@ class StationEnricher():
 
     def add_weather_data(self, df):
         df_copy = df.copy()
+        # df_copy.loc["last_update_date"] = df_copy.last_update_clean.apply(lambda x: x.date())
         df_copy['last_update_date'] = df_copy.last_update_clean.apply(lambda x: x.date())
         df_with_weather = pd.merge(df_copy, self.weather_data, how='left', left_on='last_update_date', right_on='date')
         return df_with_weather

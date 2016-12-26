@@ -74,7 +74,7 @@ def predict_available_bikes(model, number_station):
         temperature = weather_data['main']['temp']
         humidity = weather_data['main']['humidity']
         wind = weather_data['wind']['speed']
-        precipitation = 1
+        precipitation = 0
 
         array_to_predict = [number_station, weekday, hour, minute, latitude, longitude,
                             available_bikes_previous, weekday_previous, hour_previous, minute_previous,
