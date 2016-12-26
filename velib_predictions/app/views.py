@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify
-from velib_predictions.app.predict import *
 from velib_predictions.app import app
+from velib_predictions.app.api_utils import predict_available_bikes
 from velib_predictions.utils.io import load_pickle
 
 # Todo : In predict.py, get today weather data (curl)
