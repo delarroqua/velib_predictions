@@ -9,6 +9,7 @@ from velib_predictions.utils.io import load_json, paths_exist, export_pickle, lo
 from velib_predictions.utils.df import get_features_and_targets, FilterPostalCode
 from velib_predictions.utils.station_enricher import StationEnricher
 
+import time
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,8 +59,11 @@ if __name__ == '__main__':
     else:
         # Enrich station
         logger.info("Enrich dataframe")
+        start = time.time()
         station_enricher = StationEnricher(stations_df=stations_filtered_df, weather_data=weather_data)
         df_enriched = station_enricher.enrich_stations()
+        enricher_running_time = time.time() - start
+        logger.info("Running enricher took %s", enricher_running_time)
 
         logger.info("Ratio data_enriched/data_raw : %s", len(df_enriched)/len(stations_raw_df))
 
