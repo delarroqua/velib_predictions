@@ -39,7 +39,7 @@ input[type="text"] {
 
 
 /* prediction form  */
-#prediction-form {
+#prediction-form, #prediction-result, #errors-box {
     text-align: center;
     padding-top: 2em;
 }
@@ -47,3 +47,19 @@ input[type="text"] {
 .footer {
     padding-top: 2em;
 }
+
+/* Errors-box */
+#errors-box {
+  color: #ff0000;
+}
+
+/* resize image */
+img {
+  display: inline-block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
+}
+
+

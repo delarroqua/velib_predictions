@@ -3,8 +3,6 @@ from velib_predictions.app.predict import *
 from velib_predictions.app import app
 from velib_predictions.utils.io import load_pickle
 
-# Todo : Css of prediction_result.html
-# Todo : Handle basic errors with jquery validate
 # Todo : In predict.py, get today weather data (curl)
 
 # Todo : Create list_stations.csv file, and load it to views.py
