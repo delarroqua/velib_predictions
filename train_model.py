@@ -14,23 +14,27 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Todo : Speedup function 'add_previous_date_variables' (enhancing using Cython ?)
+# Todo : try to register to weather wunderground
+# Todo : train a good model with the weather data
+# Todo : test performance with weather data more rigourously
 
 # Todo : Integrate cloud (remove Nan)
 # Todo : Integrate events (create dummies)
 
 # Todo : Essayer Keras sur les données
-# Todo : Speedup function 'add_previous_date_variables'
+
 
 
 if __name__ == '__main__':
 
     # Set relevant lists
-    postal_code_list = ['75004', '75011', '75012']
+    postal_code_list = ['75004', '75011']
     # columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
     #                     'weekday_previous', 'hour_previous', 'minute_previous']
     columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
                           'weekday_previous', 'hour_previous', 'minute_previous',
-                          'date', 'temperature', 'humidity', 'wind', 'precipitation'] # 'cloud', 'events'
+                          'temperature', 'humidity', 'wind', 'precipitation'] # 'cloud', 'events'
     target_column = "available_bikes"
 
     # Create raw_data_loader

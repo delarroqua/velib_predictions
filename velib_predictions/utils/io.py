@@ -21,8 +21,7 @@ def load_json(path):
 def export_pickle(object, path):
     logger.info("exporting to %s", path)
     with open(path, 'wb') as f:
-        pickle.dump(object, f, protocol=2)
-    # pedro added "protocol=2"
+        pickle.dump(object, f, protocol=2) # protocol=2 to work with python 2.7
 
 
 def load_pickle(path):

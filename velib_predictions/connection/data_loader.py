@@ -65,7 +65,7 @@ class RawDataLoader:
         SELECT A.*
         FROM other.stations_informations_enhanced i, A
         WHERE i.number = A.number
-        AND i.postal_code IN ('75004', '75011', '75012')
+        AND i.postal_code IN ('75004', '75011')
         limit {{limit}}
         """
         df = self.connection.query(query, config_query)
