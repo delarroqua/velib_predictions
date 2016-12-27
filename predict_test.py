@@ -1,4 +1,4 @@
-from velib_predictions.utils.api_utils import predict_available_bikes
+from velib_predictions.api.predict import predict_available_bikes
 from velib_predictions.utils.io import load_pickle
 
 if __name__ == '__main__':
