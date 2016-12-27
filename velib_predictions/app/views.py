@@ -1,16 +1,13 @@
 from flask import render_template, request, jsonify
 from velib_predictions.app import app
-from velib_predictions.utils.api_utils import predict_available_bikes
+from velib_predictions.api.predict import predict_available_bikes
 from velib_predictions.utils.io import load_pickle
 
-# Todo : try to register to weather wunderground
-# Todo : train a good model with the weather data
-# Todo : test performance with weather data more rigourously
+
 # Todo : Create list_stations.csv file, and load it to views.py
-# Todo : Integrate a Map with every velib stations on it
+# Todo : Integrate a Google Map with every velib stations on it
 
 # Todo: create tests
-
 # Todo : create auth in api
 
 # Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
