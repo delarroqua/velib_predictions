@@ -1,5 +1,5 @@
-from velib_predictions.utils.io import load_json
-from velib_predictions.utils.api_utils import convert_timestamp, get_stations_list
+from velib_modules.utils.io import load_json
+from velib_modules.utils.api_utils import convert_timestamp, get_stations_list
 
 import json
 import psycopg2

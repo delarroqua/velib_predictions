@@ -1,5 +1,5 @@
-from velib_predictions.api.predict import predict_available_bikes
-from velib_predictions.utils.io import load_pickle
+from velib_modules.api.predict import predict_available_bikes
+from velib_modules.utils.io import load_pickle
 
 if __name__ == '__main__':
     number_station = '4006'

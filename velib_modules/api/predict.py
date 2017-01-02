@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import timedelta
 
-from velib_predictions.utils.api_utils import get_weather_data, convert_timestamp, get_station_individual
+from velib_modules.utils.api_utils import get_weather_data, convert_timestamp, get_station_individual
 
 
 def predict_available_bikes(model, number_station):

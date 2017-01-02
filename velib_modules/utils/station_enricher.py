@@ -2,7 +2,7 @@ import pandas as pd
 
 from datetime import timedelta
 
-from velib_predictions.utils.df import FilterPreviousVariables, FilterWeatherData
+from velib_modules.utils.df import FilterPreviousVariables, FilterWeatherData
 
 
 

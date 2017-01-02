@@ -1,5 +1,5 @@
-from velib_predictions.connection.db_connection import PostgresConnection
-from velib_predictions.utils.io import load_json
+from velib_modules.connection.db_connection import PostgresConnection
+from velib_modules.utils.io import load_json
 
 import json
 import requests

@@ -2,8 +2,8 @@ import time
 import sys
 import traceback
 
-from velib_predictions.api import scrape_stations
-from velib_predictions.utils.api_utils import get_stations_list
+from velib_modules.api import scrape_stations
+from velib_modules.utils.api_utils import get_stations_list
 
 if __name__ == "__main__":
         print("{}: Starting scrape cycle".format(time.ctime()))

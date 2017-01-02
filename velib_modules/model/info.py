@@ -1,4 +1,4 @@
-from velib_predictions.model.evaluation import evaluate_model
+from velib_modules.model.evaluation import evaluate_model
 
 
 def compute_model_information(model, features_train, features_test, target_test):

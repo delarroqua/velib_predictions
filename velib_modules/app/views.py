@@ -1,7 +1,7 @@
 from flask import render_template, request, jsonify
-from velib_predictions.app import app
-from velib_predictions.api.predict import predict_available_bikes
-from velib_predictions.utils.io import load_pickle
+from velib_modules.app import app
+from velib_modules.api.predict import predict_available_bikes
+from velib_modules.utils.io import load_pickle
 
 
 # Todo : Create list_stations.csv file, and load it to views.py
