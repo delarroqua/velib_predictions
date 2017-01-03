@@ -26,13 +26,13 @@ function initMap() {
             return function() {
                 infoWindow.setContent('<h4>' + String(list_stations[i][0]) + '</h4>');
                 infoWindow.open(map, marker);
+                $('#number_station').val(this.title)
             }
         })(marker, i));
 
         // Automatically center the map fitting all markers on the screen
         // map.fitBounds(bounds);
-    }
-
+    };
 };
 
 
