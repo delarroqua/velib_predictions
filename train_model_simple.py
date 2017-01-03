@@ -7,18 +7,23 @@ from velib_modules.model.info import compute_model_information
 
 from velib_modules.utils.io import load_json, paths_exist, export_pickle, load_pickle, load_dataframe_pickle, export_dataframe_pickle
 from velib_modules.utils.df import SplitFeaturesTarget, FilterPostalCode
-from velib_modules.utils.station_enricher import StationEnricherSimple
+from velib_modules.utils.station_enricher import enrich_stations_simple
 
 from sklearn.model_selection import train_test_split
 
+import os
 import time
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Todo : Write a clean simple_model
 
 
 if __name__ == '__main__':
+
+    # Set out_directory
+    out_directory = "files/simple_model/"
 
     # Set relevant lists
     postal_code_list = ['75004', '75011']
@@ -26,32 +31,31 @@ if __name__ == '__main__':
                           'weekday_previous', 'hour_previous', 'minute_previous']
     target_column = "available_bikes"
 
-    # Create raw_data_loader
-    config_db = load_json("config/config_db.json")
-    connection = PostgresConnection(config_db)
-    raw_data_loader = RawDataLoader(connection, cache_overwrite=False)
 
-    # Load raw data
-    config_query = load_json("config/config_query.json")
-    stations_raw_df = raw_data_loader.load_table(config_query)
-
-    # Filter df
-    stations_filtered_df = FilterPostalCode(stations_raw_df, postal_code_list)
-
-
-    if paths_exist("files/simple_model/features_train.pkl", "files/simple_model/features_test.pkl", "files/simple_model/target_train.pkl",
-                   "files/simple_model/target_test.pkl"):
+    # Load data
+    if paths_exist(os.path.join(out_directory,"features_train.pkl"), os.path.join(out_directory,"features_test.pkl"),
+                   os.path.join(out_directory,"target_train.pkl"), os.path.join(out_directory,"target_test.pkl")):
         logger.info("Retrieving features train and test from cache")
-        features_train = load_dataframe_pickle("files/simple_model/features_train.pkl")
-        features_test = load_dataframe_pickle("files/simple_model/features_test.pkl")
-        target_train = load_dataframe_pickle("files/simple_model/target_train.pkl")
-        target_test = load_dataframe_pickle("files/simple_model/target_test.pkl")
+        features_train = load_dataframe_pickle(os.path.join(out_directory,"features_train.pkl"))
+        features_test = load_dataframe_pickle(os.path.join(out_directory,"features_test.pkl"))
+        target_train = load_dataframe_pickle(os.path.join(out_directory,"target_train.pkl"))
+        target_test = load_dataframe_pickle(os.path.join(out_directory,"target_test.pkl"))
     else:
+        # Create Connection
+        config_db = load_json("config/config_db.json")
+        connection = PostgresConnection(config_db)
+
+        query = """ select * from {{table}} limit {{limit}} """
+        config_query = {"table": "other.update_stations_with_previous_variables", "limit": 500000}
+        stations_raw_df = connection.query(query, config_query)
+
+        # Filter df
+        stations_filtered_df = FilterPostalCode(stations_raw_df, postal_code_list)
+
         # Enrich station
         logger.info("Enrich dataframe")
         start = time.time()
-        station_enricher_simple = StationEnricherSimple(stations_df=stations_filtered_df)
-        df_enriched = station_enricher_simple.enrich_stations()
+        df_enriched = enrich_stations_simple(stations_filtered_df)
         enricher_running_time = time.time() - start
         logger.info("Running enricher took %s", enricher_running_time)
 
@@ -65,25 +69,25 @@ if __name__ == '__main__':
             train_test_split(features, target, test_size=0.2, random_state=42)
 
         logger.info("Exporting splitted dataset...")
-        export_dataframe_pickle(features_train, "files/simple_model/features_train.pkl")
-        export_dataframe_pickle(features_test, "files/simple_model/features_test.pkl")
-        export_dataframe_pickle(target_train, "files/simple_model/target_train.pkl")
-        export_dataframe_pickle(target_test, "files/simple_model/target_test.pkl")
+        export_dataframe_pickle(features_train, os.path.join(out_directory,"features_train.pkl"))
+        export_dataframe_pickle(features_test, os.path.join(out_directory,"features_test.pkl"))
+        export_dataframe_pickle(target_train, os.path.join(out_directory,"target_train.pkl"))
+        export_dataframe_pickle(target_test, os.path.join(out_directory,"target_test.pkl"))
 
     # Load model
-    if paths_exist("files/simple_model/model.pkl"):
+    if paths_exist(os.path.join(out_directory,"model.pkl")):
         logger.info("Loading cached model")
-        model = load_pickle("files/simple_model/model.pkl")
+        model = load_pickle(os.path.join(out_directory,"model.pkl"))
     else:
         logger.info("Fitting model...")
         config_model = load_json("config/config_model.json")
         model = RFTransformer(config_model_parameters=config_model["random_forest_parameters"], columns=columns_model_list)
         model.fit(features_train, target_train)
         logger.info("Model fitted. Exporting...")
-        export_pickle(model, "files/simple_model/model.pkl")
+        export_pickle(model, os.path.join(out_directory,"model.pkl"))
 
-    logger.info("Uploading model information to database...")
     model_information = compute_model_information(model, features_train, features_test, target_test)
+    logger.info("Uploading model information to database...")
     connection.upload_model_information(model_information)
 
     logger.info("Evaluate model on validation set")
