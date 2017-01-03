@@ -14,10 +14,11 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Todo : Speedup function 'add_previous_date_variables' (enhancing using Cython ?)
-# Todo : try to register to weather wunderground
-# Todo : train a good model with the weather data
+# Todo : Add 'path_model = os.path.join(args.out_directory,"model.pkl")'
+# Todo : add weather data with wundergound
 # Todo : test performance with weather data more rigourously
+
+# Todo : Speedup function 'add_previous_date_variables' (enhancing using Cython ?)
 
 # Todo : Integrate cloud (remove Nan)
 # Todo : Integrate events (create dummies)

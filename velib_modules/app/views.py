@@ -16,7 +16,7 @@ from velib_modules.utils.io import load_pickle
 
 
 # Load model
-model = load_pickle("files/model.pkl")
+model = load_pickle("files/app_model/model.pkl")
 
 # Load list of stations
 # list_stations = pd.read_csv('list_stations.csv')
@@ -32,7 +32,7 @@ def ask_prediction():
 
 @app.route('/')
 def index():
-    return render_template('prediction.html') # list_stations=list_stations
+    return render_template('prediction.html')  # list_stations=list_stations
 
 
 # @app.route('/prediction', methods=['GET'])
