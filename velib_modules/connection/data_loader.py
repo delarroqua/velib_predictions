@@ -26,7 +26,7 @@ class RawDataLoader:
 
     def load_table(self, config_query):
         table = config_query["table"]
-        cache_path = "files/{table}.pkl".format(table=table)
+        cache_path = "files/simple_model/{table}.pkl".format(table=table)
         if self.cache:
             if paths_exist(cache_path):
                 if self.cache_overwrite:
