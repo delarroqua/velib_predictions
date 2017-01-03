@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import timedelta
 
-from velib_modules.utils.api_utils import get_weather_data, convert_timestamp, get_station_individual
+from velib_modules.utils.api_utils import convert_timestamp, get_station_individual, get_weather_data_owm, get_weather_data_wg
 
 
 def predict_available_bikes(model, number_station):
@@ -26,12 +26,19 @@ def predict_available_bikes(model, number_station):
         hour = evaluation_date.hour
         minute = evaluation_date.minute
 
-        # weather data
-        weather_data = get_weather_data()
-        temperature = weather_data['main']['temp']
-        humidity = weather_data['main']['humidity']
-        wind = weather_data['wind']['speed']
-        precipitation = 0
+        # weather data (open weather map)
+        #weather_data = get_weather_data_owm()
+        #temperature = weather_data['main']['temp']
+        #humidity = weather_data['main']['humidity']
+        #wind = weather_data['wind']['speed']
+        #precipitation = 0
+
+        # weather data (wunderground)
+        weather_data = get_weather_data_wg()
+        temperature = weather_data['temp_c']
+        humidity = weather_data['relative_humidity']
+        wind = weather_data['wind_kph']
+        precipitation = weather_data['precip_1hr_in']
 
         array_to_predict = [number_station, weekday, hour, minute, latitude, longitude,
                             available_bikes_previous, weekday_previous, hour_previous, minute_previous,

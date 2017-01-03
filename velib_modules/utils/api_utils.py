@@ -14,9 +14,14 @@ def convert_timestamp(timestamp_to_convert):
     s = timestamp_to_convert / 1000.0
     return datetime.fromtimestamp(s).strftime('%Y-%m-%d %H:%M:%S')
 
-def get_weather_data():
+def get_weather_data_owm():
     url_weather = "http://api.openweathermap.org/data/2.5/weather"
     response = requests.get(url_weather, params=config_velib["openweathermap"])
+    return json.loads(response.content.decode("utf8"))
+
+def get_weather_data_wg():
+    url_weather = "http://api.wunderground.com/api/3a735d3ecf5d4f00/conditions/q/FR/Paris.json"
+    response = requests.get(url_weather)
     return json.loads(response.content.decode("utf8"))
 
 def get_lat_long(number_station):
