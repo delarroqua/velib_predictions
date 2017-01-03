@@ -3,9 +3,8 @@ from velib_modules.app import app
 from velib_modules.api.predict import predict_available_bikes
 from velib_modules.utils.io import load_pickle
 
+import pandas as pd
 
-# Todo : Create list_stations.csv file, and load it to views.py
-# Todo : Integrate a Google Map with every velib stations on it
 
 # Todo: create tests
 # Todo : create auth in api
@@ -19,7 +18,7 @@ from velib_modules.utils.io import load_pickle
 model = load_pickle("files/app_model/model.pkl")
 
 # Load list of stations
-# list_stations = pd.read_csv('list_stations.csv')
+list_stations = pd.read_csv('list_stations.csv')
 
 # request example : curl -i http://localhost:5000/prediction/4006
 @app.route('/prediction', methods=['POST'])
@@ -32,7 +31,8 @@ def ask_prediction():
 
 @app.route('/')
 def index():
-    return render_template('prediction.html')  # list_stations=list_stations
+    return render_template('prediction.html', list_stations=list_stations.values.tolist())
+
 
 
 # @app.route('/prediction', methods=['GET'])
