@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 if __name__ == '__main__':
 
     # Set out_directory
-    out_directory = "files/simple_model/"
+    out_directory = "files/app_model/"
 
     # Set features of model
     columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
@@ -43,7 +43,11 @@ if __name__ == '__main__':
         config_db = load_json("config/config_db.json")
         connection = PostgresConnection(config_db)
 
-        query = """ select * from {{table}} limit {{limit}} """
+        query = """
+                select number, address, latitude, longitude, available_bikes, last_update, last_update_previous, available_bikes_previous
+                from {{table}}
+                limit {{limit}}
+                """
         config_query = {"table": "other.update_stations_with_previous_variables", "limit": 50000}
         stations_raw_df = connection.query(query, config_query)
 
