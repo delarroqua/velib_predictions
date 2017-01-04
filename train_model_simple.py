@@ -38,8 +38,11 @@ if __name__ == '__main__':
     connection = PostgresConnection(config_db)
 
     # Load data
+    type_enricher = 'simple'
+    weather_data = ""
     features_train, features_test, target_train, target_test = \
-        get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory)
+        get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
+                                 type_enricher, weather_data)
 
     # Load model
     if paths_exist(os.path.join(out_directory,"model.pkl")):

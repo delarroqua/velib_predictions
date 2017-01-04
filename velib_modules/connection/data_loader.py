@@ -1,5 +1,5 @@
 from velib_modules.utils.df import SplitFeaturesTarget, FilterPostalCode
-from velib_modules.utils.station_enricher import enrich_stations_simple
+from velib_modules.utils.station_enricher import enrich_stations_simple, enrich_stations
 
 from velib_modules.utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
 
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory):
+def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher, weather_data):
     # Load data
     if paths_exist(os.path.join(out_directory,"features_train.pkl"), os.path.join(out_directory,"features_test.pkl"),
                    os.path.join(out_directory,"target_train.pkl"), os.path.join(out_directory,"target_test.pkl")):
@@ -34,7 +34,12 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         # Enrich station
         logger.info("Enrich dataframe")
         start = time.time()
-        df_enriched = enrich_stations_simple(stations_filtered_df)
+
+        if (type_enricher == 'simple'):
+            df_enriched = enrich_stations_simple(stations_filtered_df)
+        else:
+            df_enriched = enrich_stations(stations_filtered_df, weather_data)
+
         enricher_running_time = time.time() - start
         logger.info("Running enricher took %s", enricher_running_time)
 

@@ -24,7 +24,7 @@ def add_previous_date_variables(df):
 def add_weather_data(df, weather_data):
     df_copy = df.copy()
     # df_copy.loc["last_update_date"] = df_copy.last_update_clean.apply(lambda x: x.date())
-    df_copy['last_update_date'] = df_copy.last_update_clean.apply(lambda x: x.date())
+    df_copy['last_update_date'] = df_copy.last_update.apply(lambda x: x.date())
     df_with_weather = pd.merge(df_copy, weather_data, how='left', left_on='last_update_date', right_on='date')
     return df_with_weather
 
@@ -52,7 +52,7 @@ def enrich_stations_simple(df):
     return stations_df_enriched
 
 
-# Station Enricher
+# Station Enricher Classic
 def enrich_stations(df, weather_data):
     stations_df = df.copy()
     stations_df = add_date_variables(stations_df)
