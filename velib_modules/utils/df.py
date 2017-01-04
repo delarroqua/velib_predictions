@@ -32,24 +32,3 @@ def SplitFeaturesTarget(df, target_column):
     features = df.drop(target_column, 1)
     return features, target
 
-
-def get_features_and_targets(df, target_column):
-    if paths_exist("files/features_train.pkl", "files/features_test.pkl", "files/target_train.pkl",
-                   "files/target_test.pkl"):
-        logger.info("Retrieving features train and test from cache")
-        features_train = load_dataframe_pickle("files/features_train.pkl")
-        features_test = load_dataframe_pickle("files/features_test.pkl")
-        target_train = load_dataframe_pickle("files/target_train.pkl")
-        target_test = load_dataframe_pickle("files/target_test.pkl")
-    else:
-        logger.info("Split target and features")
-        features, target = SplitFeaturesTarget(df, target_column)
-        logger.info("Train/test split")
-        features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.2,
-                                                                                    random_state=42)
-        logger.info("Exporting splitted dataset...")
-        export_dataframe_pickle(features_train, "files/features_train.pkl")
-        export_dataframe_pickle(features_test, "files/features_test.pkl")
-        export_dataframe_pickle(target_train, "files/target_train.pkl")
-        export_dataframe_pickle(target_test, "files/target_test.pkl")
-    return features_train, features_test, target_train, target_test
