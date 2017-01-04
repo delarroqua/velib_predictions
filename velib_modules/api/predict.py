@@ -27,18 +27,20 @@ def predict_available_bikes(model, number_station):
         minute = evaluation_date.minute
 
         # weather data (open weather map)
-        #weather_data = get_weather_data_owm()
-        #temperature = weather_data['main']['temp']
-        #humidity = weather_data['main']['humidity']
-        #wind = weather_data['wind']['speed']
-        #precipitation = 0
+        weather_data = get_weather_data_owm()
+        temperature = weather_data['main']['temp']
+        humidity = weather_data['main']['humidity']
+        wind = weather_data['wind']['speed']
+        precipitation = 0
 
         # weather data (wunderground)
-        weather_data = get_weather_data_wg()
-        temperature = weather_data['temp_c']
-        humidity = weather_data['relative_humidity']
-        wind = weather_data['wind_kph']
-        precipitation = weather_data['precip_1hr_in']
+        # weather_data = get_weather_data_wg()
+        # print(weather_data)
+        # print(weather_data['current_observation'])
+        # temperature = weather_data['current_observation']['temp_c']
+        # humidity = weather_data['current_observation']['relative_humidity']
+        # wind = weather_data['current_observation']['wind_kph']
+        # precipitation = weather_data['current_observation']['precip_1hr_in']
 
         array_to_predict = [number_station, weekday, hour, minute, latitude, longitude,
                             available_bikes_previous, weekday_previous, hour_previous, minute_previous,
@@ -74,6 +76,7 @@ def predict_available_bikes_simple(model, number_station):
 
         array_to_predict = [number_station, weekday, hour, minute, latitude, longitude,
                             available_bikes_previous, weekday_previous, hour_previous, minute_previous]
+
 
         try:
             prediction = int(model.predict([array_to_predict])[0])
