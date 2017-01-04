@@ -41,25 +41,19 @@ class AddPreviousVariables():
 if __name__ == '__main__':
 
     # Set out_directory
-    out_directory = "files/simple_model/"
+    out_directory = "files/app_model/"
 
     # Create Connection
     config_db = load_json("config/config_db.json")
     connection = PostgresConnection(config_db)
 
     query = """
-           select
-            (response_api -> 'number')::TEXT        AS number,
-            (response_api -> 'address')::TEXT       AS address,
-            (response_api -> 'position' -> 'lat')::TEXT       AS latitude,
-            (response_api -> 'position' -> 'lng')::TEXT       AS longitude,
-             response_api -> 'available_bikes'      AS available_bikes,
-           ((response_api -> 'last_update_clean')::TEXT)::TIMESTAMP     AS last_update
+           select *
            from {{table}}
            limit {{limit}}
            """
 
-    config_query = {"table": "api.update_stations", "limit": 2000000}
+    config_query = {"table": "other.update_stations_clean", "limit": 50000}
 
     df = connection.query(query, config_query)
 
@@ -68,7 +62,7 @@ if __name__ == '__main__':
     start = time.time()
     previous_update = df.apply(add_previous_variables.find_previous_update, axis=1)
     running_time = time.time() - start
-    logger.info("Adding variables took %s", running_time)
+    logger.info("Adding %s variables took %s", len(df.index), running_time)
 
     df['last_update_previous'] = pd.to_datetime(previous_update['last_update_previous'])
     df['available_bikes_previous'] = (previous_update['available_bikes_previous']).astype(float)
