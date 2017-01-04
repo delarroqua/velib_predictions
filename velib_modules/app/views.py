@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify
 from velib_modules.app import app
-from velib_modules.api.predict import predict_available_bikes
+from velib_modules.api.predict import predict_available_bikes, predict_available_bikes_simple
 from velib_modules.utils.io import load_pickle
 
 import pandas as pd
@@ -24,9 +24,9 @@ list_stations = pd.read_csv('list_stations.csv')
 @app.route('/prediction', methods=['POST'])
 def ask_prediction():
     number_station = request.form['number_station']
-    print(number_station)
-    prediction = predict_available_bikes(model, number_station)
+    prediction = predict_available_bikes_simple(model, number_station)
     return jsonify({'prediction': prediction})
+
 
 
 @app.route('/')
