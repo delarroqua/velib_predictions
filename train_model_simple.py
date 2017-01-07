@@ -17,32 +17,28 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
 
-    # Set out_directory
+
+    # Set variables
+    type_enricher = 'simple'
     out_directory = "files/simple_model/"
-
-    # Set features of model
-    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
-                          'weekday_previous', 'hour_previous', 'minute_previous']
-
     postal_code_list = ['75004', '75011']
     target_column = "available_bikes"
-
-    config_query = {
-        "columns": "number, address, latitude, longitude, available_bikes, last_update, last_update_previous, available_bikes_previous",
-        "table": "other.update_stations_with_previous_variables",
-        "limit": 10000
-    }
 
     # Create Connection
     config_db = load_json("config/config_db.json")
     connection = PostgresConnection(config_db)
 
+    # Load config query
+    config_query = load_json("config/config_query.json")
+
     # Load data
-    type_enricher = 'simple'
-    weather_data = ""
     features_train, features_test, target_train, target_test = \
         get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
-                                 type_enricher, weather_data)
+                                 type_enricher)
+
+    # Set features of model
+    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
+                          'weekday_previous', 'hour_previous', 'minute_previous']
 
     # Load model
     if paths_exist(os.path.join(out_directory,"model.pkl")):

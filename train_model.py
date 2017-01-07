@@ -24,33 +24,28 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
 
-    # Set out_directory
+    # Set variables
+    type_enricher = "classic"
     out_directory = "files/classic_model/"
-
-    # Set features of model
-    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
-                          'weekday_previous', 'hour_previous', 'minute_previous',
-                          'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
-
     postal_code_list = ['75004', '75011']
     target_column = "available_bikes"
-
-    config_query = load_json("config/config_query.json")
-
 
     # Create raw_data_loader
     config_db = load_json("config/config_db.json")
     connection = PostgresConnection(config_db)
 
-    # Load weather data
-    path_weather_data = 'paris_temperature.csv'
-    weather_data = load_weather_data(path_weather_data)
+    # Load config query
+    config_query = load_json("config/config_query.json")
 
     # Load data
-    type_enricher = "classic"
     features_train, features_test, target_train, target_test = \
         get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
-                                 type_enricher, weather_data)
+                                 type_enricher)
+
+    # Set features of model
+    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
+                          'weekday_previous', 'hour_previous', 'minute_previous',
+                          'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
 
     # Load model
     if paths_exist(os.path.join(out_directory, "model.pkl")):
