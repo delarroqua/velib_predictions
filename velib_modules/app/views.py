@@ -1,10 +1,11 @@
 from flask import render_template, request, jsonify
 from velib_modules.app import app
-from velib_modules.api.predict import predict_available_bikes, predict_available_bikes_simple
+from velib_modules.api.predict import predict_available_bikes_simple
 from velib_modules.utils.io import load_pickle
 
 import pandas as pd
 
+# Todo : handle errors in javascripts
 
 # Todo: create tests
 # Todo : create auth in api
@@ -28,19 +29,6 @@ def ask_prediction():
     return jsonify({'prediction': prediction})
 
 
-
 @app.route('/')
 def index():
     return render_template('prediction.html', list_stations=list_stations.values.tolist())
-
-
-
-# @app.route('/prediction', methods=['GET'])
-# def ask_prediction_old():
-#     # number_station = request.args.get('number_station')
-#     if (number_station.isdigit()):
-#         number_station = int(number_station)
-#         prediction = predict_available_bikes(model, number_station)
-#     else:
-#         prediction = -1
-#     return render_template('prediction.html', number_station=number_station, prediction=prediction) # list_stations=list_stations
