@@ -34,19 +34,22 @@ body {
 /* form inputs  */
 input[type="text"] {
     padding: 10px;
-    border: solid 1px #dcdcdc;
+    background: transparent;
+    border: none;
+    font-size : 24px;
     transition: box-shadow 0.3s, border 0.3s;
+    /* border: solid 1px #dcdcdc; */
 }
 
 
 /* prediction form  */
 #prediction-form, #prediction-result, #errors-box {
     text-align: center;
-    padding-top: 2em;
+    padding-top: 1em;
 }
 
 .footer {
-    padding-top: 2em;
+    padding-top: 1em;
 }
 
 /* Errors-box */
@@ -68,7 +71,8 @@ input[type="text"] {
 
 #map {
     width: 100%;
-    height: 250px;
-    margin-bottom: 2em;
-    margin-top: 2em;
+    height: 350px;
+    margin-top: 4em;
+    /* margin-bottom: 2em; */
+
 }
