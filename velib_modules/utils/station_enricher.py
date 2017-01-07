@@ -29,6 +29,16 @@ def add_weather_data(df, weather_data):
     return df_with_weather
 
 
+def load_weather_data(path_weather_data):
+    weather_data_raw = pd.read_csv(path_weather_data)
+    # Clean weather data
+    weather_data = weather_data_raw[['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h',
+                                     'Precipitationmm']]  # ' CloudCover', ' Events'
+    weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
+    weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
+    return weather_data
+
+
 def cast_df(df):
     df_casted = df.copy()
     # Convert number to int
@@ -39,6 +49,7 @@ def cast_df(df):
     # Convert available_bikes_previous to int
     df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(int)
     return df_casted
+
 
 
 # Station Enricher Simple
@@ -53,11 +64,16 @@ def enrich_stations_simple(df):
 
 
 # Station Enricher Classic
-def enrich_stations(df, weather_data):
+def enrich_stations(df):
     stations_df = df.copy()
     stations_df = add_date_variables(stations_df)
+
+    # Load and add weather data
+    path_weather_data = 'files/input/paris_temperature.csv'
+    weather_data = load_weather_data(path_weather_data)
     stations_df = add_weather_data(stations_df, weather_data)
     stations_df = FilterWeatherData(stations_df)  # Filter out rows without weather data
+
     stations_df = add_previous_date_variables(stations_df)
     stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
     stations_df = cast_df(stations_df)

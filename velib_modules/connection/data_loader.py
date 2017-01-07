@@ -7,15 +7,13 @@ from sklearn.model_selection import train_test_split
 
 import os
 import time
-import pandas as pd
-
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher, weather_data):
+def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher):
     # Load data
     if paths_exist(os.path.join(out_directory,"features_train.pkl"), os.path.join(out_directory,"features_test.pkl"),
                    os.path.join(out_directory,"target_train.pkl"), os.path.join(out_directory,"target_test.pkl")):
@@ -38,7 +36,7 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         if (type_enricher == 'simple'):
             df_enriched = enrich_stations_simple(stations_filtered_df)
         else:
-            df_enriched = enrich_stations(stations_filtered_df, weather_data)
+            df_enriched = enrich_stations(stations_filtered_df)
 
         enricher_running_time = time.time() - start
         logger.info("Running enricher took %s", enricher_running_time)
@@ -60,14 +58,6 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
     return features_train, features_test, target_train, target_test
 
 
-def load_weather_data(path_weather_data):
-    weather_data_raw = pd.read_csv(path_weather_data)
-    # Clean weather data
-    weather_data = weather_data_raw[['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h',
-                                     'Precipitationmm']]  # ' CloudCover', ' Events'
-    weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
-    weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
-    return weather_data
 
 
 
