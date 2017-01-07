@@ -63,21 +63,3 @@ def enrich_stations_simple(df):
     return stations_df_enriched
 
 
-# Station Enricher Classic
-def enrich_stations(df):
-    stations_df = df.copy()
-    stations_df = add_date_variables(stations_df)
-
-    # Load and add weather data
-    path_weather_data = 'files/input/paris_temperature.csv'
-    weather_data = load_weather_data(path_weather_data)
-    stations_df = add_weather_data(stations_df, weather_data)
-    stations_df = FilterWeatherData(stations_df)  # Filter out rows without weather data
-
-    stations_df = add_previous_date_variables(stations_df)
-    stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
-    stations_df = cast_df(stations_df)
-    stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous',
-                                             'last_update_date', 'date'], 1)  # 'events'
-    return stations_df_enriched
-

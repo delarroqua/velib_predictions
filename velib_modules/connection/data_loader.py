@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher):
+def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory):
     # Load data
     if paths_exist(os.path.join(out_directory,"features_train.pkl"), os.path.join(out_directory,"features_test.pkl"),
                    os.path.join(out_directory,"target_train.pkl"), os.path.join(out_directory,"target_test.pkl")):
@@ -33,10 +33,7 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         logger.info("Enrich dataframe")
         start = time.time()
 
-        if (type_enricher == 'simple'):
-            df_enriched = enrich_stations_simple(stations_filtered_df)
-        else:
-            df_enriched = enrich_stations(stations_filtered_df)
+        df_enriched = enrich_stations_simple(stations_filtered_df)
 
         enricher_running_time = time.time() - start
         logger.info("Running enricher took %s", enricher_running_time)
@@ -56,60 +53,3 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         export_dataframe_pickle(target_train, os.path.join(out_directory,"target_train.pkl"))
         export_dataframe_pickle(target_test, os.path.join(out_directory,"target_test.pkl"))
     return features_train, features_test, target_train, target_test
-
-
-
-
-
-class RawDataLoader:
-    def __init__(self, connection, cache=True, cache_overwrite=False):
-        self.connection = connection
-        self.cache = cache
-        self.cache_overwrite = cache_overwrite
-
-    def load_table(self, config_query):
-        table = config_query["table"]
-        cache_path = "files/simple_model/{table}.pkl".format(table=table)
-        if self.cache:
-            if paths_exist(cache_path):
-                if self.cache_overwrite:
-                    logger.info("Retrieving from database")
-                    df = self.load_table_sql_stations(config_query)
-                    export_dataframe_pickle(df, cache_path)
-                else:
-                    logger.info("Retrieving from cache")
-                    df = load_dataframe_pickle(cache_path)
-            else:
-                logger.info("Retrieving from database")
-                df = self.load_table_sql_stations(config_query)
-                export_dataframe_pickle(df, cache_path)
-        else:
-            df = self.load_table_sql_stations(config_query)
-        return df
-
-    def load_table_sql_stations(self, config_query):
-        """
-        Load data from a table specified in the config_query dictionary and returns a pandas dataframe
-        :param config_query: dictionary containing the following keys: "table" (string),
-        "columns" (array), and "limit" (integer)
-        :return: pandas dataframe containing the requested table
-        """
-        query = """
-        WITH A AS (
-        select
-         (response_api -> 'number')::TEXT        AS number,
-         (response_api -> 'address')::TEXT       AS address,
-         (response_api -> 'position' -> 'lat')::TEXT       AS latitude,
-         (response_api -> 'position' -> 'lng')::TEXT       AS longitude,
-          response_api -> 'available_bikes'      AS available_bikes,
-        ((response_api -> 'last_update_clean')::TEXT)::TIMESTAMP     AS last_update_clean
-        from {{table}}
-        )
-        SELECT A.*
-        FROM other.stations_informations_enhanced i, A
-        WHERE i.number = A.number
-        AND i.postal_code IN ('75004', '75011')
-        limit {{limit}}
-        """
-        df = self.connection.query(query, config_query)
-        return df
