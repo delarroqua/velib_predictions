@@ -1,7 +1,12 @@
 <form action="/prediction" method="post" id="prediction-form">
 
-    <label for="number_station"><h3>Numéro de la station</h3></label><br>
-    <input type="text" name="number_station" id="number_station" value="{{number_station}}"><br><br>
+    <label for="number_station"><h3>Numéro de la station</h3></label>
+
+    {% if number_station is defined %}
+        <input type="text" name="number_station" id="number_station" value="{{number_station}}" readonly><br><br>
+    {% else %}
+        <input type="text" name="number_station" id="number_station" value="" readonly><br><br>
+    {% endif %}
 
     <input type="submit" value="Prédire" class="submit-button">
 

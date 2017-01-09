@@ -19,7 +19,7 @@ import pandas as pd
 model = load_pickle("files/simple_model/model.pkl")
 
 # Load list of stations
-list_stations = pd.read_csv('files/input/list_stations.csv')
+list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
 
 # request example : curl -i http://localhost:5000/prediction/4006
 @app.route('/prediction', methods=['POST'])
