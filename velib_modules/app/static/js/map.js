@@ -13,7 +13,7 @@ function initMap() {
 
     // Loop through our array of markers & place each one on the map
     for( i = 0; i < list_stations.length; i++ ) {
-        var position = new google.maps.LatLng(list_stations[i][1], list_stations[i][2]);
+        var position = new google.maps.LatLng(list_stations[i][3], list_stations[i][4]);
         bounds.extend(position);
         marker = new google.maps.Marker({
             position: position,
@@ -24,7 +24,11 @@ function initMap() {
         // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
-                infoWindow.setContent('<h4>' + String(list_stations[i][0]) + '</h4>');
+                infoWindow.setContent(
+                '<h4>' + 'Station n°' + String(list_stations[i][0]) + '</h4>'
+                + '<h5>' + String(list_stations[i][1]) + '</h5>'
+                + '<h5>' + String(list_stations[i][2]) + '</h5>'
+                );
                 infoWindow.open(map, marker);
                 $('#number_station').val(this.title)
             }
