@@ -10,10 +10,14 @@ def FilterWeatherData(df):
     df_filtered = df_filtered[df_filtered.temperature.notnull()]
     return df_filtered
 
+def AddPostalCode(df):
+    df_with_postal_code = df.copy()
+    df_with_postal_code['postal_code'] = df_with_postal_code.address.apply(lambda x: re.findall('\d{5}', x)[0])
+    return df_with_postal_code
+
 
 def FilterPostalCode(df, postal_code_list):
     df_filtered = df.copy()
-    df_filtered['postal_code'] = df_filtered.address.apply(lambda x: re.findall('\d{5}', x)[0])
     df_filtered = df_filtered[df_filtered.postal_code.isin(postal_code_list)]
     return df_filtered
 

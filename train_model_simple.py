@@ -17,11 +17,11 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
 
-
     # Set variables
     type_enricher = 'simple'
-    out_directory = "files/simple_model/"
-    postal_code_list = ['75004', '75011']
+    out_directory = "files/app_model/"
+    # postal_code_list = ['75004', '75011']
+    postal_code_list = 0
     target_column = "available_bikes"
 
     # Create Connection

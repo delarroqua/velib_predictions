@@ -1,5 +1,5 @@
-from velib_modules.utils.df import SplitFeaturesTarget, FilterPostalCode
-from velib_modules.utils.station_enricher import enrich_stations_simple, enrich_stations
+from velib_modules.utils.df import SplitFeaturesTarget, FilterPostalCode, AddPostalCode
+from velib_modules.utils.station_enricher import enrich_stations_simple # enrich_stations
 
 from velib_modules.utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
 
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory):
+def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher):
     # Load data
     if paths_exist(os.path.join(out_directory,"features_train.pkl"), os.path.join(out_directory,"features_test.pkl"),
                    os.path.join(out_directory,"target_train.pkl"), os.path.join(out_directory,"target_test.pkl")):
@@ -26,8 +26,15 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         query = """ select {{columns}} from {{table}} limit {{limit}} """
         stations_raw_df = connection.query(query, config_query)
 
+        # Add Postal Code
+        logger.info("Add postal code")
+        df_with_postal_code = AddPostalCode(stations_raw_df)
+
         # Filter df
-        stations_filtered_df = FilterPostalCode(stations_raw_df, postal_code_list)
+        if (postal_code_list != 0):
+            stations_filtered_df = FilterPostalCode(df_with_postal_code, postal_code_list)
+        else:
+            stations_filtered_df = df_with_postal_code
 
         # Enrich station
         logger.info("Enrich dataframe")

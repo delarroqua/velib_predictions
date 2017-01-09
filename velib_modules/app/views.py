@@ -16,7 +16,7 @@ import pandas as pd
 
 
 # Load model
-model = load_pickle("files/simple_model/model.pkl")
+model = load_pickle("files/app_model/model.pkl")
 
 # Load list of stations
 list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
