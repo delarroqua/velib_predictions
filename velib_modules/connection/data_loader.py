@@ -40,7 +40,12 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         logger.info("Enrich dataframe")
         start = time.time()
 
-        df_enriched = enrich_stations_simple(stations_filtered_df)
+        if (type_enricher == "simple"):
+            df_enriched = enrich_stations_simple(stations_filtered_df)
+        elif (type_enricher == "classic"):
+            df_enriched = enrich_stations(stations_filtered_df)
+        else:
+            logger.info("Wrong type of enricher")
 
         enricher_running_time = time.time() - start
         logger.info("Running enricher took %s", enricher_running_time)

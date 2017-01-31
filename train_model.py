@@ -14,16 +14,23 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# Todo : Speedup function 'add_previous_date_variables' (enhancing using Cython ?)
+
+# Todo : Integrate cloud (remove Nan)
+# Todo : Integrate events (create dummies)
+# Todo : Essayer Keras sur les données
+
+
 
 if __name__ == '__main__':
 
     # Set variables
-    type_enricher = 'simple'
-    out_directory = "files/app_model/"
-    postal_code_list = 0
+    type_enricher = "classic"
+    out_directory = "files/classic_model/"
+    postal_code_list = ['75004', '75011']
     target_column = "available_bikes"
 
-    # Create Connection
+    # Create raw_data_loader
     config_db = load_json("config/config_db.json")
     connection = PostgresConnection(config_db)
 
@@ -32,11 +39,13 @@ if __name__ == '__main__':
 
     # Load data
     features_train, features_test, target_train, target_test = \
-        get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, type_enricher)
+        get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
+                                 type_enricher)
 
     # Set features of model
     columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
-                          'weekday_previous', 'hour_previous', 'minute_previous']
+                          'weekday_previous', 'hour_previous', 'minute_previous',
+                          'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
 
     # Load model
     if paths_exist(os.path.join(out_directory, "model.pkl")):
@@ -45,10 +54,11 @@ if __name__ == '__main__':
     else:
         logger.info("Fitting model...")
         config_model = load_json("config/config_model.json")
-        model = RFTransformer(config_model_parameters=config_model["random_forest_parameters"], columns=columns_model_list)
+        model = RFTransformer(config_model_parameters=config_model["random_forest_parameters"],
+                              columns=columns_model_list)
         model.fit(features_train, target_train)
         logger.info("Model fitted. Exporting...")
-        export_pickle(model, os.path.join(out_directory,"model.pkl"))
+        export_pickle(model, os.path.join(out_directory, "model.pkl"))
 
     model_information = compute_model_information(model, features_train, features_test, target_test)
     logger.info("Uploading model information to database...")
@@ -60,3 +70,13 @@ if __name__ == '__main__':
 
     logger.info("Computing feature importance...")
     model.features_importance()
+
+
+    # print(model.predict(features_train[2:4].astype(int)))
+    # print(features_train.info())
+    # print(features_train.sample(n=1))
+    # print(model.predict(features_train.sample(n=1)))
+    # print(model.predict(np.array([2017, 48.86789, 2.34925, 3, 7, 26])))
+    # print(model.predict([[2017, 48.86789, 2.34925, 3, 7, 26]]))
+
+
