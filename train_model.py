@@ -27,7 +27,8 @@ if __name__ == '__main__':
     # Set variables
     type_enricher = "classic"
     out_directory = "files/classic_model/"
-    postal_code_list = ['75004', '75011']
+    #postal_code_list = ['75004', '75011']
+    postal_code_list = 0
     target_column = "available_bikes"
 
     # Create raw_data_loader
