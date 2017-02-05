@@ -1,5 +1,6 @@
 from velib_modules.connection.db_connection import PostgresConnection
 from velib_modules.utils.io import load_json
+from velib_modules.utils.df import FilterPostalCode, AddPostalCode
 
 import pandas as pd
 import numpy as np
@@ -42,6 +43,9 @@ if __name__ == '__main__':
 
     # Set out_directory
     out_directory = "files/app_model/"
+    #postal_code_list = ['75001', '75002', '75003', '75004', '75005', '75006', '75007', '75008', '75009', '75010',
+    #                    '75011', '75012', '75013', '75014', '75015', '75016', '75017', '75018', '75019', '75020']
+    postal_code_list = 0
 
     # Create Connection
     config_db = load_json("config/config_db.json")
@@ -53,23 +57,33 @@ if __name__ == '__main__':
            limit {{limit}}
            """
 
-    config_query = {"table": "other.update_stations_clean", "limit": 50000}
+    config_query = {"table": "other.update_stations_clean", "limit": 5000000}
 
-    df = connection.query(query, config_query)
+    logger.info("Extract stations_raw_df")
+    stations_raw_df = connection.query(query, config_query)
 
-    add_previous_variables = AddPreviousVariables(df)
+    if (postal_code_list != 0):
+        # Add Postal Code
+        logger.info("Add postal code")
+        df_with_postal_code = AddPostalCode(stations_raw_df)
+        # Filter df
+        stations_filtered_df = FilterPostalCode(df_with_postal_code, postal_code_list)
+    else:
+        stations_filtered_df = stations_raw_df
+
+    add_previous_variables = AddPreviousVariables(stations_filtered_df)
     logger.info("Add previous variables")
     start = time.time()
-    previous_update = df.apply(add_previous_variables.find_previous_update, axis=1)
+    previous_update = stations_filtered_df.apply(add_previous_variables.find_previous_update, axis=1)
     running_time = time.time() - start
-    logger.info("Adding %s variables took %s", len(df.index), running_time)
+    logger.info("Adding %s variables took %s", len(stations_filtered_df.index), running_time)
 
-    df['last_update_previous'] = pd.to_datetime(previous_update['last_update_previous'])
-    df['available_bikes_previous'] = (previous_update['available_bikes_previous']).astype(float)
+    stations_filtered_df['last_update_previous'] = pd.to_datetime(previous_update['last_update_previous'])
+    stations_filtered_df['available_bikes_previous'] = (previous_update['available_bikes_previous']).astype(float)
 
     #print(df[df.available_bikes_previous > 10])
 
-    df.to_csv("df_with_previous_variables.csv")  # header=False
+    stations_filtered_df.to_csv("df_with_previous_variables.csv")  # header=False
 
 
 
