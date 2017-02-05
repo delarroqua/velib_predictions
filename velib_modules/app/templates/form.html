@@ -1,12 +1,17 @@
 <form action="/prediction" method="post" id="prediction-form">
 
-    <label for="number_station"><h3>Numéro de la station</h3></label>
+    <label for="number_station"><p>Nombre de vélos disponibles à la station n°</p></label>
+    <input type="text" name="number_station" id="number_station" value="{{number_station}}" readonly>
 
-    {% if number_station is defined %}
-        <input type="text" name="number_station" id="number_station" value="{{number_station}}" readonly><br><br>
-    {% else %}
-        <input type="text" name="number_station" id="number_station" value="" readonly><br><br>
-    {% endif %}
+    <label for="time_prediction"><p>dans </p></label>
+    <select id="time_prediction" name="time_prediction">
+        <option value="1" selected="selected">1 heure</option>
+        <option value="2">2 heures</option>
+    </select><br><br>
+
+    <div id="tips-box">
+    Parcourez la carte et cliquez sur un autre point rouge pour sélectionnez un autre numéro de station !
+    </div><br><br>
 
     <input type="submit" value="Prédire" class="submit-button">
 

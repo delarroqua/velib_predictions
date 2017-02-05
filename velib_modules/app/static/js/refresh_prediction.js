@@ -7,7 +7,8 @@ $(document).ready(function() {
         $.post(
             'prediction',
             {
-                number_station: $('#number_station').val()
+                number_station: $('#number_station').val(),
+                time_prediction: $('#time_prediction').val()
             },
             function(data){
                 prediction = data['prediction']

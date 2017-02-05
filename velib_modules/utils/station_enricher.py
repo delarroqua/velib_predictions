@@ -32,7 +32,7 @@ def add_weather_data(df, weather_data):
 def load_weather_data(path_weather_data):
     weather_data_raw = pd.read_csv(path_weather_data)
     # Clean weather data
-    weather_data = weather_data_raw[['CET', 'Mean TemperatureC', ' Min Humidity', ' Mean Wind SpeedKm/h',
+    weather_data = weather_data_raw[['CET', 'Mean TemperatureC', ' Mean Humidity', ' Mean Wind SpeedKm/h',
                                      'Precipitationmm']]  # ' CloudCover', ' Events'
     weather_data.columns = ['date', 'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
     weather_data['date'] = pd.to_datetime(weather_data.date).apply(lambda x: x.date())
@@ -69,6 +69,7 @@ def enrich_stations(df):
     stations_df = add_date_variables(stations_df)
 
     # Load and add weather data
+    # Get it at the following link :
     path_weather_data = 'files/input/paris_temperature.csv'
     weather_data = load_weather_data(path_weather_data)
     stations_df = add_weather_data(stations_df, weather_data)

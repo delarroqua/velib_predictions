@@ -5,9 +5,13 @@ from velib_modules.utils.io import load_pickle
 
 import pandas as pd
 
-# Todo : handle errors in javascripts
+# Todo: confidence interval
+# Todo: Improve ReadMe
 
+
+# Todo : handle errors in javascripts
 # Todo: create tests
+
 # Todo : create auth in api
 
 # Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
@@ -25,10 +29,12 @@ list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
 @app.route('/prediction', methods=['POST'])
 def ask_prediction():
     number_station = request.form['number_station']
-    prediction = predict_available_bikes(model, number_station)
+    time_prediction = request.form["time_prediction"]
+    prediction = predict_available_bikes(model, number_station, time_prediction)
     return jsonify({'prediction': prediction})
 
 
 @app.route('/')
 def index():
-    return render_template('prediction.html', list_stations=list_stations.values.tolist())
+    number_station_index = 4006
+    return render_template('prediction.html', list_stations=list_stations.values.tolist(), number_station=number_station_index)

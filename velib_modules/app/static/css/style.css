@@ -33,12 +33,13 @@ body {
 
 /* form inputs  */
 input[type="text"] {
-    padding: 10px;
+    padding: 3px;
+    width: 2.3em;
     background: transparent;
     border: none;
-    font-size : 24px;
-    transition: box-shadow 0.3s, border 0.3s;
-    /* border: solid 1px #dcdcdc; */
+    font-size : 20px;
+    /*transition: box-shadow 0.3s, border 0.3s;
+    border: solid 1px #dcdcdc; */
 }
 
 
@@ -57,7 +58,12 @@ input[type="text"] {
   color: #ff0000;
 }
 
-/* resize image */
+/* Tips-box */
+#tips-box {
+  color: #ff0000;
+}
+
+/* Resize image */
 .bike-emoji {
   display: inline-block;
   max-width:50px;
@@ -76,3 +82,5 @@ input[type="text"] {
     /* margin-bottom: 2em; */
 
 }
+
+
