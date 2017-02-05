@@ -20,7 +20,7 @@ def get_weather_data_owm():
     return json.loads(response.content.decode("utf8"))
 
 def get_weather_data_wg():
-    url_weather = "http://api.wunderground.com/api/3a735d3ecf5d4f00/conditions/q/FR/Paris.json"
+    url_weather = config_velib["wunderground"]["url_weather"]
     response = requests.get(url_weather)
     return json.loads(response.content.decode("utf8"))
 
