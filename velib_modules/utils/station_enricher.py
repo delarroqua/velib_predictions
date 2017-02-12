@@ -9,7 +9,7 @@ def add_date_variables(df):
     df_with_date_variables['last_update'] = pd.to_datetime(df_with_date_variables.last_update)
     df_with_date_variables['weekday'] = df_with_date_variables.last_update.dt.weekday
     df_with_date_variables['hour'] = df_with_date_variables.last_update.dt.hour
-    df_with_date_variables['minute'] = df_with_date_variables.last_update.dt.minute
+    df_with_date_variables['minute'] = int(df_with_date_variables.last_update.dt.minute/10)
     return df_with_date_variables
 
 
@@ -18,7 +18,7 @@ def add_previous_date_variables(df):
     df_with_previous['last_update_previous'] = pd.to_datetime(df_with_previous.last_update_previous)
     df_with_previous['weekday_previous'] = df_with_previous.last_update_previous.dt.weekday
     df_with_previous['hour_previous'] = df_with_previous.last_update_previous.dt.hour
-    df_with_previous['minute_previous'] = df_with_previous.last_update_previous.dt.minute
+    df_with_previous['minute_previous'] = int(df_with_previous.last_update_previous.dt.minute/10)
     return df_with_previous
 
 
@@ -52,7 +52,6 @@ def cast_df(df):
     return df_casted
 
 
-
 # Station Enricher Simple
 def enrich_stations_simple(df):
     stations_df = df.copy()
@@ -60,7 +59,7 @@ def enrich_stations_simple(df):
     stations_df = add_previous_date_variables(stations_df)
     stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
     stations_df = cast_df(stations_df)
-    stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code','last_update_previous'], 1)
+    stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous'], 1)
     return stations_df_enriched
 
 
