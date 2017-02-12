@@ -1,5 +1,5 @@
 from velib_modules.utils.df import SplitFeaturesTarget, FilterPostalCode, AddPostalCode
-from velib_modules.utils.station_enricher import enrich_stations_simple # enrich_stations
+from velib_modules.utils.station_enricher import enrich_stations_simple, enrich_stations
 
 from velib_modules.utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle
 
@@ -27,7 +27,6 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         stations_raw_df = connection.query(query, config_query)
 
         # Add Postal Code
-        logger.info("Add postal code")
         df_with_postal_code = AddPostalCode(stations_raw_df)
 
         # Filter df

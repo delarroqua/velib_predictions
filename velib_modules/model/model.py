@@ -23,7 +23,8 @@ class ModelTransformer(BaseEstimator):
         start = time.time()
         self.model.fit(X_train, y_train)
         self.model_training_time = time.time() - start
-        logger.info("Training model took %s", self.model_training_time)
+        model_training_time_minutes = int(self.model_training_time/60)
+        logger.info("Training model took %s minutes", model_training_time_minutes)
 
     def predict(self, X):
         logger.info("Predict from model...")

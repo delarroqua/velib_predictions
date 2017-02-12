@@ -5,8 +5,10 @@ from velib_modules.utils.io import load_pickle
 
 import pandas as pd
 
+# Todo: train new model
+# Todo: create module evaluate performance
+# Todo: include Velib logo
 # Todo: confidence interval
-# Todo: Improve ReadMe
 
 
 # Todo : handle errors in javascripts

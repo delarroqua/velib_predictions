@@ -1,7 +1,11 @@
 /* General style */
 body {
-  font-family: 'Source Sans Pro', sans-serif;
-  background-color: #F9F9F9;
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: #F9F9F9;
+}
+
+p {
+    font-size : 20px;
 }
 
 /* the submit button  */
@@ -34,7 +38,7 @@ body {
 /* form inputs  */
 input[type="text"] {
     padding: 3px;
-    width: 2.3em;
+    width: 2.8em;
     background: transparent;
     border: none;
     font-size : 20px;
@@ -60,7 +64,9 @@ input[type="text"] {
 
 /* Tips-box */
 #tips-box {
-  color: #ff0000;
+  /*color: #ff0000;*/
+  color: blue;
+  font-size : 20px;
 }
 
 /* Resize image */
@@ -83,4 +89,10 @@ input[type="text"] {
 
 }
 
+
+
+.nav-right {
+    display: inline-block;
+    float: right;
+}
 

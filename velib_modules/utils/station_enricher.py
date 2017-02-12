@@ -1,6 +1,7 @@
 from velib_modules.utils.df import FilterPreviousVariables, FilterWeatherData
 
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 
 
 def add_date_variables(df):

@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class AddPreviousVariables():
+class AddPreviousVariables:
     def __init__(self, stations_df):
         self.stations_df = stations_df
 
@@ -29,7 +29,7 @@ class AddPreviousVariables():
         if (len(previous_update_array) != 0):
             previous_update = previous_update_array.iloc[0]
             last_update_previous = previous_update.last_update
-            available_bikes_previous = previous_update.available_bikes
+            available_bikes_previous = int(previous_update.available_bikes)
         else:
             last_update_previous = np.nan
             available_bikes_previous = np.nan
@@ -43,9 +43,10 @@ if __name__ == '__main__':
 
     # Set out_directory
     out_directory = "files/app_model/"
-    #postal_code_list = ['75001', '75002', '75003', '75004', '75005', '75006', '75007', '75008', '75009', '75010',
+    # postal_code_list = ['75001', '75002', '75003', '75004', '75005', '75006', '75007', '75008', '75009', '75010',
     #                    '75011', '75012', '75013', '75014', '75015', '75016', '75017', '75018', '75019', '75020']
-    postal_code_list = 0
+    postal_code_list = ['75001', '75002', '75003', '75004', '75005', '75006', '75010', '75011', '75012']
+    #postal_code_list = 0
 
     # Create Connection
     config_db = load_json("config/config_db.json")
@@ -57,14 +58,13 @@ if __name__ == '__main__':
            limit {{limit}}
            """
 
-    config_query = {"table": "other.update_stations_clean", "limit": 5000000}
+    config_query = {"table": "other.update_stations_clean", "limit": 500000}
 
     logger.info("Extract stations_raw_df")
     stations_raw_df = connection.query(query, config_query)
 
     if (postal_code_list != 0):
         # Add Postal Code
-        logger.info("Add postal code")
         df_with_postal_code = AddPostalCode(stations_raw_df)
         # Filter df
         stations_filtered_df = FilterPostalCode(df_with_postal_code, postal_code_list)
@@ -75,8 +75,9 @@ if __name__ == '__main__':
     logger.info("Add previous variables")
     start = time.time()
     previous_update = stations_filtered_df.apply(add_previous_variables.find_previous_update, axis=1)
-    running_time = time.time() - start
-    logger.info("Adding %s variables took %s", len(stations_filtered_df.index), running_time)
+    running_time_seconds = time.time() - start
+    running_time_minutes = int(running_time_seconds / 60)
+    logger.info("Adding new variables to %s rows took %s minutes", len(stations_filtered_df.index), running_time_minutes)
 
     stations_filtered_df['last_update_previous'] = pd.to_datetime(previous_update['last_update_previous'])
     stations_filtered_df['available_bikes_previous'] = (previous_update['available_bikes_previous']).astype(float)
