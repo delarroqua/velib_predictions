@@ -5,9 +5,12 @@ from velib_modules.utils.io import load_pickle
 
 import pandas as pd
 
-# Todo: train new model
-# Todo: create module evaluate performance
+
 # Todo: include Velib logo
+# Todo: train new model
+# Todo: Convert minutes in 1/6 of hour
+# Todo: create module evaluate performance
+
 # Todo: confidence interval
 
 
