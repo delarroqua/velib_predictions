@@ -20,7 +20,7 @@ You can find a series of article on these links
 #### Create conda environment
 
 ```bash
-conda create --name velib python=3.4
+conda create -n velib python=3.4 anaconda
 ```
 
 #### Switch to velib environment
