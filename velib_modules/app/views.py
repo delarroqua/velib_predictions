@@ -10,9 +10,7 @@ import pandas as pd
 # Todo: train new model
 # Todo: Convert minutes in 1/6 of hour
 # Todo: create module evaluate performance
-
 # Todo: confidence interval
-
 
 # Todo : handle errors in javascripts
 # Todo: create tests

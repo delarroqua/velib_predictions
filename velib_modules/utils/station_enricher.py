@@ -9,7 +9,7 @@ def add_date_variables(df):
     df_with_date_variables['last_update'] = pd.to_datetime(df_with_date_variables.last_update)
     df_with_date_variables['weekday'] = df_with_date_variables.last_update.dt.weekday
     df_with_date_variables['hour'] = df_with_date_variables.last_update.dt.hour
-    df_with_date_variables['minute'] = int(df_with_date_variables.last_update.dt.minute/10)
+    df_with_date_variables['minute'] = (df_with_date_variables.last_update.dt.minute/10).round(decimals=0)
     return df_with_date_variables
 
 
@@ -18,7 +18,7 @@ def add_previous_date_variables(df):
     df_with_previous['last_update_previous'] = pd.to_datetime(df_with_previous.last_update_previous)
     df_with_previous['weekday_previous'] = df_with_previous.last_update_previous.dt.weekday
     df_with_previous['hour_previous'] = df_with_previous.last_update_previous.dt.hour
-    df_with_previous['minute_previous'] = int(df_with_previous.last_update_previous.dt.minute/10)
+    df_with_previous['minute_previous'] = (df_with_previous.last_update_previous.dt.minute/10).round(decimals=0)
     return df_with_previous
 
 
