@@ -1,13 +1,15 @@
 from sklearn.base import BaseEstimator
 from sklearn.ensemble import RandomForestRegressor
 
+from xgboost import XGBRegressor
+import numpy as np
+
 import time
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Todo : add xgboost model
 
 class ModelTransformer(BaseEstimator):
     def __init__(self, config_model_parameters, columns):
@@ -34,7 +36,6 @@ class ModelTransformer(BaseEstimator):
         raise NotImplementedError("Feature importance method not implemented for this model")
 
 
-
 class RFTransformer(ModelTransformer):
     def __init__(self, config_model_parameters, columns):
         super().__init__(config_model_parameters, columns)
@@ -49,3 +50,21 @@ class RFTransformer(ModelTransformer):
             if k == n:
                 break
 
+
+class XGBTransformer(ModelTransformer):
+    def __init__(self, config_model_parameters, columns):
+        super().__init__(config_model_parameters, columns)
+        self.model = XGBRegressor(**self.model_parameters)
+        self.name = "XGBoost"
+
+    def features_importance(self, n=20):
+        b = self.model.booster()
+        fs = b.get_fscore()
+        all_features = [fs.get(f, 0.) for f in b.feature_names]
+        all_features = np.array(all_features, dtype=np.float32)
+        importance = all_features / all_features.sum()
+        logger.info("Feature importances")
+        for k, (i, f) in enumerate(reversed(sorted(zip(importance, self.columns)))):
+            logger.info("%s -> %f", f, i)
+            if k == n:
+                break

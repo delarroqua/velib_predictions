@@ -1,7 +1,7 @@
 from velib_modules.connection.db_connection import PostgresConnection
 from velib_modules.connection.data_loader import get_features_and_targets
 
-from velib_modules.model.model import RFTransformer
+from velib_modules.model.model import RFTransformer, XGBTransformer
 from velib_modules.model.evaluation import evaluate_model
 from velib_modules.model.info import compute_model_information
 
@@ -14,20 +14,15 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Todo : Speedup function 'add_previous_date_variables' (enhancing using Cython ?)
-
-# Todo : Integrate cloud (remove Nan)
-# Todo : Integrate events (create dummies)
-# Todo : Essayer Keras sur les données
 
 
 if __name__ == '__main__':
     # Set variables
     type_enricher = "classic"
-    out_directory = "files/classic_model/"
+    out_directory = "files/try/"
     # postal_code_list = ['75004', '75011']
     postal_code_list = 0
-    target_column = "available_bikes"
+    target_column = "fill_rate"
 
     # Create raw_data_loader
     config_db = load_json("config/config_db.json")
@@ -42,9 +37,9 @@ if __name__ == '__main__':
                                  type_enricher)
 
     # Set features of model
-    columns_model_list = ['number', 'weekday', 'hour', 'minute', 'latitude', 'longitude', 'available_bikes_previous',
-                          'weekday_previous', 'hour_previous', 'minute_previous',
-                          'temperature', 'humidity', 'wind', 'precipitation']  # 'cloud', 'events'
+    columns_model_list = ['number', 'weekday', 'time_float', 'latitude', 'longitude', 'available_bikes_previous',
+                          'weekday_previous', 'time_float_previous',
+                          'temperature', 'humidity', 'wind', 'precipitation']
 
     # Load model
     if paths_exist(os.path.join(out_directory, "model.pkl")):
@@ -53,8 +48,9 @@ if __name__ == '__main__':
     else:
         logger.info("Fitting model...")
         config_model = load_json("config/config_model.json")
-        model = RFTransformer(config_model_parameters=config_model["random_forest_parameters"],
+        model = XGBTransformer(config_model_parameters=config_model["xgboost_parameters"],
                               columns=columns_model_list)
+        print(features_train.shape)
         model.fit(features_train, target_train)
         logger.info("Model fitted. Exporting...")
         export_pickle(model, os.path.join(out_directory, "model.pkl"))
