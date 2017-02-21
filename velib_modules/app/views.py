@@ -21,12 +21,12 @@ import pandas as pd
 # Todo : Faire un package (setup.py)
 
 
-
 # Load model
 model = load_pickle("files/classic_model/model.pkl")
 
 # Load list of stations
 list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
+
 
 # request example : curl -i http://localhost:5000/prediction/4006
 @app.route('/prediction', methods=['POST'])
@@ -40,4 +40,5 @@ def ask_prediction():
 @app.route('/')
 def index():
     number_station_index = 4006
-    return render_template('prediction.html', list_stations=list_stations.values.tolist(), number_station=number_station_index)
+    return render_template('prediction.html', list_stations=list_stations.values.tolist(),
+                           number_station=number_station_index)

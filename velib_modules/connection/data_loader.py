@@ -26,6 +26,8 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         query = """ select {{columns}} from {{table}} limit {{limit}} """
         stations_raw_df = connection.query(query, config_query)
 
+        stations_raw_df = stations_raw_df.sample(len(stations_raw_df), random_state=42)
+
         # Add Postal Code
         df_with_postal_code = AddPostalCode(stations_raw_df)
 
