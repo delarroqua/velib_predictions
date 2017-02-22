@@ -12,38 +12,33 @@ def FilterTotalStands(df):
 
 def add_fill_rate(df):
     df_with_fill_rate = df.copy()
-    df_with_fill_rate['fill_rate'] = df.available_bikes / df.bike_stands
-    df_with_fill_rate['fill_rate_previous'] = df.available_bikes_previous / df.bike_stands
+    df_with_fill_rate['fill_rate'] = (df.available_bikes / df.bike_stands).astype(float)
+    df_with_fill_rate['fill_rate_previous'] = (df.available_bikes_previous / df.bike_stands).astype(float)
     return df_with_fill_rate
 
 
 def add_date_variables(df):
     df_with_date_variables = df.copy()
-    df_with_date_variables['last_update'] = pd.to_datetime(df_with_date_variables.last_update)
-    df_with_date_variables['weekday'] = df_with_date_variables.last_update.dt.weekday
-    # df_with_date_variables['hour'] = df_with_date_variables.last_update.dt.hour
-    # df_with_date_variables['minute'] = (df_with_date_variables.last_update.dt.minute/10).round(decimals=0)
-    hour = df_with_date_variables.last_update.dt.hour
-    minute = df_with_date_variables.last_update.dt.minute
+    last_update = pd.to_datetime(df_with_date_variables.last_update)
+    hour = last_update.dt.hour
+    minute = last_update.dt.minute
+    df_with_date_variables['weekday'] = last_update.dt.weekday
     df_with_date_variables['time_float'] = hour + minute / 60
     return df_with_date_variables
 
 
 def add_previous_date_variables(df):
     df_with_previous = df.copy()
-    df_with_previous['last_update_previous'] = pd.to_datetime(df_with_previous.last_update_previous)
-    df_with_previous['weekday_previous'] = df_with_previous.last_update_previous.dt.weekday
-    # df_with_previous['hour_previous'] = df_with_previous.last_update_previous.dt.hour
-    # df_with_previous['minute_previous'] = (df_with_previous.last_update_previous.dt.minute/10).round(decimals=0)
-    hour_previous = df_with_previous.last_update_previous.dt.hour
-    minute_previous = df_with_previous.last_update_previous.dt.minute
+    last_update_previous = pd.to_datetime(df_with_previous.last_update_previous)
+    hour_previous = last_update_previous.dt.hour
+    minute_previous = last_update_previous.dt.minute
+    df_with_previous['weekday_previous'] = last_update_previous.dt.weekday
     df_with_previous['time_float_previous'] = hour_previous + minute_previous / 60
     return df_with_previous
 
 
 def add_weather_data(df, weather_data):
     df_copy = df.copy()
-    # df_copy.loc["last_update_date"] = df_copy.last_update_clean.apply(lambda x: x.date())
     df_copy['last_update_date'] = df_copy.last_update.apply(lambda x: x.date())
     df_with_weather = pd.merge(df_copy, weather_data, how='left', left_on='last_update_date', right_on='date')
     return df_with_weather
@@ -66,11 +61,10 @@ def cast_df(df):
     # Convert lat-long to float
     df_casted['latitude'] = df_casted.latitude.astype("float64")
     df_casted['longitude'] = df_casted.longitude.astype("float64")
-    # Convert to int
-    df_casted['available_bikes'] = df_casted.available_bikes.astype(int)
+    # Convert to float
+    df_casted['available_bikes'] = df_casted.available_bikes.astype(float)
     df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(float)
-    df_casted['bike_stands'] = df_casted.bike_stands.astype(int)
-    # df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(int)
+    df_casted['bike_stands'] = df_casted.bike_stands.astype(float)
     return df_casted
 
 
@@ -82,7 +76,7 @@ def enrich_stations(df, columns_model_list):
     stations_df = add_fill_rate(stations_df)
 
     # Load and add weather data
-    # Get it at the following link :
+    # Get it at the following link : https://www.wunderground.com/history/airport/LFPB/2016/11/1/CustomHistory.html?dayend=3&monthend=2&yearend=2017&req_city=&req_state=&req_statename=&reqdb.zip=&reqdb.magic=&reqdb.wmo=&format=1
     path_weather_data = 'files/input/paris_temperature.csv'
     weather_data = load_weather_data(path_weather_data)
     stations_df = add_weather_data(stations_df, weather_data)
@@ -92,6 +86,4 @@ def enrich_stations(df, columns_model_list):
     stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
 
     stations_df_enriched = stations_df[columns_model_list+['fill_rate']]
-    # stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous',
-    #                                         'last_update_date', 'date'], 1)
     return stations_df_enriched

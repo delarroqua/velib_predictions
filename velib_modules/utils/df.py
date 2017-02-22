@@ -31,7 +31,7 @@ def FilterPreviousVariables(df):
 
 
 def SplitFeaturesTarget(df, target_column):
-    target = df[target_column].astype(int)
+    target = df[target_column]
     features = df.drop(target_column, 1)
     return features, target
 

@@ -14,9 +14,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# Todo : Add feedback button
 # Todo : Export only raw_data.pkl
-# Todo : Create confidence scale
-# Todo : Add KNN
+
 
 
 if __name__ == '__main__':
@@ -42,16 +43,16 @@ if __name__ == '__main__':
     features_train, features_test, target_train, target_test = \
         get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
                                  columns_model_list)
-
     # Load model
     if paths_exist(os.path.join(out_directory, "model.pkl")):
         logger.info("Loading cached model")
         model = load_pickle(os.path.join(out_directory, "model.pkl"))
     else:
-        logger.info("Fitting model...")
         config_model = load_json("config/config_model.json")
         model = XGBTransformer(config_model_parameters=config_model["xgboost_parameters"],
-                               columns=columns_model_list)
+                               columns=columns_model_list+['knn'])
+        # Fit the model
+        logger.info("Fitting model...")
         model.fit(features_train, target_train)
         logger.info("Model fitted. Exporting...")
         export_pickle(model, os.path.join(out_directory, "model.pkl"))

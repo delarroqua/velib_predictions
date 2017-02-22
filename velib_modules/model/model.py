@@ -22,6 +22,7 @@ class ModelTransformer(BaseEstimator):
     def fit(self, X_train, y_train):
         logger.info("Input shape %s", X_train.shape)
         logger.info("Training model %s ...", self.name)
+        print(X_train.head())
         start = time.time()
         X_train = X_train.as_matrix()
         self.model.fit(X_train, y_train)

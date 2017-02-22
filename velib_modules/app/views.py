@@ -4,8 +4,9 @@ from velib_modules.api.predict import predict_available_bikes
 from velib_modules.utils.io import load_pickle
 
 import pandas as pd
+import os
 
-# Todo: include Velib logo
+
 # Todo : handle errors in javascripts
 
 # Todo: create tests
@@ -13,7 +14,9 @@ import pandas as pd
 
 
 # Load model
-model = load_pickle("files/app_model/model.pkl")
+path_model = "files/app_model/"
+knn = load_pickle(os.path.join(path_model, 'knn.pkl'))
+model = load_pickle(os.path.join(path_model, 'model.pkl'))
 
 # Load list of stations
 list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
@@ -24,7 +27,7 @@ list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
 def ask_prediction():
     number_station = request.form['number_station']
     time_prediction = request.form["time_prediction"]
-    available_bikes, bike_stands = predict_available_bikes(model, number_station, time_prediction)
+    available_bikes, bike_stands = predict_available_bikes(model, knn, number_station, time_prediction)
     return jsonify({'available_bikes': available_bikes, 'bike_stands': bike_stands})
 
 
