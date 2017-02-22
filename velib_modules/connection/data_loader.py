@@ -13,6 +13,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def get_raw_data(target_column, postal_code_list, connection, config_query, out_directory, columns_model_list):
+    if paths_exist(os.path.join(out_directory, "raw_data.pkl")):
+        logger.info("Retrieving raw_data from cache")
+        raw_data = load_dataframe_pickle(os.path.join(out_directory, "raw_data.pkl"))
+    else:
+        query = """ select {{columns}} from {{table}} limit {{limit}} """
+        stations_raw_df = connection.query(query, config_query)
+
 def get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory, columns_model_list):
     # Load data
     if paths_exist(os.path.join(out_directory, "features_train.pkl"), os.path.join(out_directory, "features_test.pkl"),

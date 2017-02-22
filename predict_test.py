@@ -5,7 +5,7 @@ from velib_modules.utils.io import load_pickle
 if __name__ == '__main__':
     number_station = '4006'
     time_prediction = '1'
-    path_model = "files/try/model.pkl"
+    path_model = "files/app_model/model.pkl"
 
     model = load_pickle(path_model)
     prediction = predict_available_bikes(model, number_station, time_prediction)

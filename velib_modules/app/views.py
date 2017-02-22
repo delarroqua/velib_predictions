@@ -5,24 +5,15 @@ from velib_modules.utils.io import load_pickle
 
 import pandas as pd
 
-
 # Todo: include Velib logo
-# Todo: train new model
-# Todo: Convert minutes in 1/6 of hour
-# Todo: create module evaluate performance
-# Todo: confidence interval
-
 # Todo : handle errors in javascripts
+
 # Todo: create tests
-
 # Todo : create auth in api
-
-# Todo : Store a model.pkl in the S3 bucket, and change the query accordingly
-# Todo : Faire un package (setup.py)
 
 
 # Load model
-model = load_pickle("files/classic_model/model.pkl")
+model = load_pickle("files/app_model/model.pkl")
 
 # Load list of stations
 list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')

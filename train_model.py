@@ -14,10 +14,14 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Todo : Export only raw_data.pkl
+# Todo : Create confidence scale
+# Todo : Add KNN
+
 
 if __name__ == '__main__':
     # Set variables
-    out_directory = "files/try/"
+    out_directory = "files/app_model/"
     # postal_code_list = ['75004', '75011']
     postal_code_list = 0
     target_column = "fill_rate"

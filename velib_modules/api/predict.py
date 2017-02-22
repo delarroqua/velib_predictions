@@ -11,13 +11,11 @@ def predict_available_bikes(model, number_station, time_prediction):
     last_station_update = get_station_individual(number_station)
 
     if last_station_update != {'error': 'Station not found'}:
-        # Get previous_date, available_bikes_previous, & lat-long
+        # Get previous_date, available_bikes_previous, lat-long, & total bike_stands
         previous_date = pd.to_datetime(convert_timestamp(last_station_update["last_update"]))
         available_bikes_previous = last_station_update["available_bike_stands"]
         latitude = last_station_update["position"]["lat"]
         longitude = last_station_update["position"]["lng"]
-
-        # Get total bike_stands
         bike_stands = last_station_update["bike_stands"]
 
         # Previous date input
@@ -67,5 +65,5 @@ def predict_available_bikes(model, number_station, time_prediction):
 
         prediction_array = model.predict(df_to_predict)
         fill_rate = float(prediction_array[0])
-        available_bikes = fill_rate * bike_stands
+        available_bikes = int(fill_rate * bike_stands)
         return available_bikes
