@@ -23,6 +23,7 @@ class ModelTransformer(BaseEstimator):
         logger.info("Input shape %s", X_train.shape)
         logger.info("Training model %s ...", self.name)
         start = time.time()
+        X_train = X_train.as_matrix()
         self.model.fit(X_train, y_train)
         self.model_training_time = time.time() - start
         model_training_time_minutes = int(self.model_training_time/60)
@@ -30,6 +31,7 @@ class ModelTransformer(BaseEstimator):
 
     def predict(self, X):
         logger.info("Predict from model...")
+        X = X.as_matrix()
         return self.model.predict(X)
 
     def features_importance(self, n=20):

@@ -15,10 +15,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
 if __name__ == '__main__':
     # Set variables
-    type_enricher = "classic"
     out_directory = "files/try/"
     # postal_code_list = ['75004', '75011']
     postal_code_list = 0
@@ -31,15 +29,15 @@ if __name__ == '__main__':
     # Load config query
     config_query = load_json("config/config_query.json")
 
+    # Set features of model
+    columns_model_list = ['number', 'latitude', 'longitude', 'weekday', 'time_float', 'bike_stands',
+                          'weekday_previous', 'time_float_previous', 'fill_rate_previous',
+                          'temperature', 'humidity', 'wind', 'precipitation']
+
     # Load data
     features_train, features_test, target_train, target_test = \
         get_features_and_targets(target_column, postal_code_list, connection, config_query, out_directory,
-                                 type_enricher)
-
-    # Set features of model
-    columns_model_list = ['number', 'weekday', 'time_float', 'latitude', 'longitude', 'available_bikes_previous',
-                          'weekday_previous', 'time_float_previous',
-                          'temperature', 'humidity', 'wind', 'precipitation']
+                                 columns_model_list)
 
     # Load model
     if paths_exist(os.path.join(out_directory, "model.pkl")):
@@ -49,8 +47,7 @@ if __name__ == '__main__':
         logger.info("Fitting model...")
         config_model = load_json("config/config_model.json")
         model = XGBTransformer(config_model_parameters=config_model["xgboost_parameters"],
-                              columns=columns_model_list)
-        print(features_train.shape)
+                               columns=columns_model_list)
         model.fit(features_train, target_train)
         logger.info("Model fitted. Exporting...")
         export_pickle(model, os.path.join(out_directory, "model.pkl"))

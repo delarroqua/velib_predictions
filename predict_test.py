@@ -1,24 +1,16 @@
-from velib_modules.api.predict import predict_available_bikes, predict_available_bikes_simple
+from velib_modules.api.predict import predict_available_bikes
 from velib_modules.utils.io import load_pickle
 
 
 if __name__ == '__main__':
-
-    model_type = 'classic'
     number_station = '4006'
-    time_prediction = '2'
+    time_prediction = '1'
+    path_model = "files/try/model.pkl"
 
-    if (model_type == 'simple'):
-        model = load_pickle("files/simple_model/model.pkl")
-        prediction = predict_available_bikes(model, number_station, time_prediction)
-    elif (model_type == 'classic'):
-        model = load_pickle("files/classic_model/model.pkl")
-        prediction = predict_available_bikes(model, number_station, time_prediction)
-    else:
-        model = load_pickle("files/app_model/model.pkl")
-        prediction = predict_available_bikes(model, number_station, time_prediction)
+    model = load_pickle(path_model)
+    prediction = predict_available_bikes(model, number_station, time_prediction)
 
-    if (prediction == 'error'):
+    if prediction == 'error':
         print('Error : no prediction available')
     else:
         print("Prediction for station n°{0}: {1} available bikes".format(number_station, prediction))

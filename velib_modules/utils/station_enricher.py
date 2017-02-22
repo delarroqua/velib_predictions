@@ -9,6 +9,7 @@ def FilterTotalStands(df):
     df_filtered = df_filtered[df_filtered.bike_stands.notnull()]
     return df_filtered
 
+
 def add_fill_rate(df):
     df_with_fill_rate = df.copy()
     df_with_fill_rate['fill_rate'] = df.available_bikes / df.bike_stands
@@ -69,23 +70,11 @@ def cast_df(df):
     df_casted['available_bikes'] = df_casted.available_bikes.astype(int)
     df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(float)
     df_casted['bike_stands'] = df_casted.bike_stands.astype(int)
-    #df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(int)
+    # df_casted['available_bikes_previous'] = df_casted.available_bikes_previous.astype(int)
     return df_casted
 
 
-# Station Enricher Simple
-def enrich_stations_simple(df):
-    stations_df = df.copy()
-    stations_df = add_date_variables(stations_df)
-    stations_df = add_previous_date_variables(stations_df)
-    stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
-    stations_df = cast_df(stations_df)
-    stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous'], 1)
-    return stations_df_enriched
-
-
-# Station Enricher Classic
-def enrich_stations(df):
+def enrich_stations(df, columns_model_list):
     stations_df = df.copy()
     stations_df = FilterTotalStands(stations_df)
     stations_df = cast_df(stations_df)
@@ -101,6 +90,8 @@ def enrich_stations(df):
 
     stations_df = add_previous_date_variables(stations_df)
     stations_df = FilterPreviousVariables(stations_df)  # Filter out rows without previous variables
-    stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous',
-                                             'last_update_date', 'date'], 1)
+
+    stations_df_enriched = stations_df[columns_model_list+['fill_rate']]
+    # stations_df_enriched = stations_df.drop(['last_update', 'address', 'postal_code', 'last_update_previous',
+    #                                         'last_update_date', 'date'], 1)
     return stations_df_enriched
