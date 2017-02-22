@@ -66,4 +66,4 @@ def predict_available_bikes(model, number_station, time_prediction):
         prediction_array = model.predict(df_to_predict)
         fill_rate = float(prediction_array[0])
         available_bikes = int(fill_rate * bike_stands)
-        return available_bikes
+        return available_bikes, bike_stands

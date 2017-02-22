@@ -28,6 +28,7 @@ function initMap() {
                 '<h4>' + 'Station n°' + String(list_stations[i][0]) + '</h4>'
                 + '<h5>' + String(list_stations[i][1]) + '</h5>'
                 + '<h5>' + String(list_stations[i][2]) + '</h5>'
+                + '<h5>' + 'Nombre de support de vélo: ' + String(list_stations[i][5]) + '</h5>'
                 );
                 infoWindow.open(map, marker);
                 $('#number_station').val(this.title)

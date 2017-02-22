@@ -8,9 +8,11 @@ if __name__ == '__main__':
     path_model = "files/app_model/model.pkl"
 
     model = load_pickle(path_model)
-    prediction = predict_available_bikes(model, number_station, time_prediction)
+    available_bikes, bike_stands = predict_available_bikes(model, number_station, time_prediction)
 
-    if prediction == 'error':
+    if available_bikes is None:
         print('Error : no prediction available')
     else:
-        print("Prediction for station n°{0}: {1} available bikes".format(number_station, prediction))
+        print("Prediction for station n°{0}: {1} available bikes sur {2} bike stands".format(number_station,
+                                                                                             available_bikes,
+                                                                                             bike_stands))

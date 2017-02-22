@@ -11,8 +11,10 @@ $(document).ready(function() {
                 time_prediction: $('#time_prediction').val()
             },
             function(data){
-                prediction = data['prediction']
-                $("#prediction").text(prediction)
+                available_bikes = data['available_bikes']
+                available_spots = data['bike_stands'] - available_bikes
+                $("#available_bikes").text(available_bikes)
+                $("#available_spots").text(available_spots)
             }
         );
         // Hide evaluation box if there is errors box is not empty

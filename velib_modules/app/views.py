@@ -24,8 +24,8 @@ list_stations = pd.read_csv('files/input/list_stations.csv', encoding='utf-8')
 def ask_prediction():
     number_station = request.form['number_station']
     time_prediction = request.form["time_prediction"]
-    prediction = predict_available_bikes(model, number_station, time_prediction)
-    return jsonify({'prediction': prediction})
+    available_bikes, bike_stands = predict_available_bikes(model, number_station, time_prediction)
+    return jsonify({'available_bikes': available_bikes, 'bike_stands': bike_stands})
 
 
 @app.route('/')
