@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 # Todo : Add feedback button
+# Todo : Withdraw weather, mettre Knn instead
+# Todo : Get the 3 closest stations and average the fill rate
 # Todo : Export only raw_data.pkl
 
 
@@ -50,7 +52,7 @@ if __name__ == '__main__':
     else:
         config_model = load_json("config/config_model.json")
         model = XGBTransformer(config_model_parameters=config_model["xgboost_parameters"],
-                               columns=columns_model_list+['knn'])
+                               columns=columns_model_list)  # +['knn']
         # Fit the model
         logger.info("Fitting model...")
         model.fit(features_train, target_train)

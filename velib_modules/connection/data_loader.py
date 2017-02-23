@@ -3,7 +3,7 @@ from velib_modules.utils.station_enricher import enrich_stations
 
 from velib_modules.utils.io import paths_exist, export_dataframe_pickle, load_dataframe_pickle, export_pickle
 
-from velib_modules.model.knn import KnnModel
+# from velib_modules.model.knn import KnnModel
 
 from sklearn.model_selection import train_test_split
 
@@ -60,15 +60,15 @@ def get_features_and_targets(target_column, postal_code_list, connection, config
         features, target = SplitFeaturesTarget(df_enriched, target_column)
 
         # Add KNN
-        logger.info("Add Knn")
-        knn = KnnModel(k=3)
-        start_knn = time.time()
-        knn.fit(features, features['fill_rate_previous'])
-        knn_running_time = time.time() - start_knn
-        logger.info("Running Knn took %s", knn_running_time)
-        features = knn.add_knn_feature(features)
-        logger.info("Exporting Knn...")
-        export_pickle(knn, os.path.join(out_directory, "knn.pkl"))
+        # logger.info("Add Knn")
+        # knn = KnnModel(k=3)
+        # start_knn = time.time()
+        # knn.fit(features, features['fill_rate_previous'])
+        # knn_running_time = time.time() - start_knn
+        # logger.info("Running Knn took %s", knn_running_time)
+        # features = knn.add_knn_feature(features)
+        # logger.info("Exporting Knn...")
+        # export_pickle(knn, os.path.join(out_directory, "knn.pkl"))
 
         # Train/test split
         logger.info("Train/test split")

@@ -6,7 +6,7 @@ from velib_modules.utils.api_utils import convert_timestamp, get_station_individ
     get_weather_data_owm, get_weather_data_wg
 
 
-def predict_available_bikes(model, knn, number_station, time_prediction):
+def predict_available_bikes(model, number_station, time_prediction):  # knn,
     number_station = int(number_station)
     last_station_update = get_station_individual(number_station)
 
@@ -62,7 +62,7 @@ def predict_available_bikes(model, knn, number_station, time_prediction):
             'wind': [wind],
             'precipitation': [float(precipitation)]
         })
-        df_to_predict = knn.add_knn_feature(df_to_predict)
+        # df_to_predict = knn.add_knn_feature(df_to_predict)
 
         prediction_array = model.predict(df_to_predict)
         fill_rate = float(prediction_array[0])
