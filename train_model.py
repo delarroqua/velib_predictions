@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 # Todo : Add feedback button
-# Todo : Withdraw weather, mettre Knn instead
+
+# Todo : Withdraw weather
 # Todo : Get the 3 closest stations and average the fill rate
 # Todo : Export only raw_data.pkl
 
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     # Set variables
-    out_directory = "files/app_model/"
+    out_directory = "files/try3/"
     # postal_code_list = ['75004', '75011']
     postal_code_list = 0
     target_column = "fill_rate"
@@ -38,8 +39,8 @@ if __name__ == '__main__':
 
     # Set features of model
     columns_model_list = ['number', 'latitude', 'longitude', 'weekday', 'time_float', 'bike_stands',
-                          'weekday_previous', 'time_float_previous', 'fill_rate_previous',
-                          'temperature', 'humidity', 'wind', 'precipitation']
+                          'weekday_previous', 'time_float_previous', 'fill_rate_previous', 'temperature']
+                          # , 'humidity', 'wind', 'precipitation']
 
     # Load data
     features_train, features_test, target_train, target_test = \
