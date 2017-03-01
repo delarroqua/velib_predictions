@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect
 from velib_modules.app import app
 from velib_modules.api.predict import predict_available_bikes
 from velib_modules.utils.io import load_pickle, load_json
@@ -29,6 +29,14 @@ def ask_prediction():
     time_prediction = request.form["time_prediction"]
     available_bikes, bike_stands = predict_available_bikes(model, number_station, time_prediction)
     return jsonify({'available_bikes': available_bikes, 'bike_stands': bike_stands})
+
+
+@app.route('/feedback', methods=['POST'])
+def insert_feedback():
+    feedback = request.form['feedback']
+    # available_bikes = request.form['available_bikes']
+    # send feedback to postgres here
+    return redirect("/", code=302)
 
 
 @app.route('/')
